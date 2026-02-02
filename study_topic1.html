@@ -27,7 +27,7 @@
             position: relative;
         }
         
-        /* ШАПКА */
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -79,7 +79,7 @@
             transition: width 0.3s ease;
         }
         
-        /* КАРТОЧКА */
+
         .card-container {
             width: 100%;
             height: 450px;
@@ -159,7 +159,7 @@
             opacity: 0.8;
         }
         
-        /* КРУГЛЫЕ КНОПКИ СТРЕЛОК */
+
         .nav-arrow {
             position: absolute;
             top: 50%;
@@ -211,7 +211,7 @@
             right: -70px;
         }
         
-        /* КНОПКА ТЕСТА */
+
         .test-btn-container {
             text-align: center;
             margin-top: 30px;
@@ -252,7 +252,7 @@
             box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
         }
         
-        /* ОБЪЯСНЕНИЯ */
+
         .explanation {
             margin-bottom: 20px;
         }
@@ -277,7 +277,7 @@
             margin-bottom: 8px;
         }
         
-        /* ИНДИКАТОРЫ КАРТОЧЕК */
+
         .card-indicators {
             display: flex;
             justify-content: center;
@@ -313,7 +313,7 @@
             background: #7f8c8d;
         }
         
-        /* СВАЙП ИНДИКАТОР */
+
         .swipe-hint {
             text-align: center;
             margin-top: 15px;
@@ -322,7 +322,7 @@
             display: none;
         }
         
-        /* ИНФОРМАЦИЯ О ТЕМЕ */
+
         .module {
             margin-top: 20px;
             padding: 15px;
@@ -333,7 +333,7 @@
             box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
         
-        /* СТАТУС ПРОГРЕССА */
+
         .progress-status {
             text-align: center;
             margin-top: 10px;
@@ -341,7 +341,7 @@
             font-size: 0.9rem;
         }
         
-        /* ФУТЕР */
+
         .footer {
             background: white;
             border-radius: 15px 15px 0 0;
@@ -402,7 +402,7 @@
             transform: translateY(-2px);
         }
         
-        /* КНОПКА ОТПРАВКИ ПИСЬМА */
+
         .email-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -434,7 +434,7 @@
             font-size: 0.9rem;
         }
         
-        /* МОДАЛЬНОЕ ОКНО (ПОПАП) */
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -620,7 +620,7 @@
             margin-top: 5px;
         }
         
-        /* АНИМАЦИИ */
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -637,7 +637,7 @@
             }
         }
         
-        /* АДАПТИВНОСТЬ */
+
         @media (max-width: 1024px) {
             .nav-arrow {
                 width: 45px;
@@ -765,7 +765,7 @@
             }
         }
         
-        /* ПЛАВНЫЕ АНИМАЦИИ БЕЗ ДРЫГАНИЯ */
+
         .card.slide-out-left {
             animation: smoothSlideOutLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
@@ -842,12 +842,12 @@
             }
         }
         
-        /* АНИМАЦИЯ ПЕРЕВОРОТА БЕЗ ДРЫГАНИЯ */
+
         .card.smooth-flip {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* ПУЛЬСИРУЮЩАЯ АНИМАЦИЯ ДЛЯ КНОПКИ ТЕСТА */
+
         @keyframes pulse {
             0% { 
                 transform: scale(1);
@@ -883,7 +883,7 @@
             </div>
         </div>
         
-        <!-- КРУГЛЫЕ КНОПКИ СТРЕЛОК -->
+
         <button class="nav-arrow prev-arrow" id="prevArrow" title="Предыдущая карточка">
             ←
         </button>
@@ -894,14 +894,14 @@
         
         <div class="card-container">
             <div class="card" id="card">
-                <!-- ПЕРЕДНЯЯ СТОРОНА -->
+
                 <div class="card-front">
                     <div class="card-number" id="cardNumFront">#1</div>
                     <h2 class="card-title" id="cardTitle">Что такое экономика?</h2>
                     <div class="hint">Кликните, чтобы перевернуть карточку</div>
                 </div>
                 
-                <!-- ОБОРОТНАЯ СТОРОНА -->
+
                 <div class="card-back">
                     <div class="card-number" id="cardNumBack">#1</div>
                     
@@ -918,7 +918,7 @@
                     <div class="explanation">
                         <h4>🎯 Ключевые моменты:</h4>
                         <ul id="keyPoints">
-                            <!-- Заполнится через JS -->
+
                         </ul>
                     </div>
                     
@@ -930,35 +930,35 @@
             </div>
         </div>
         
-        <!-- ИНДИКАТОРЫ КАРТОЧЕК -->
+
         <div class="card-indicators" id="cardIndicators">
-            <!-- Будет заполнено через JS -->
+
         </div>
         
-        <!-- ПОДСКАЗКА ДЛЯ СВАЙПА -->
+
         <div class="swipe-hint">
             👆 Свайпните влево/вправо для переключения карточек
         </div>
         
-        <!-- ПРОГРЕСС И СТАТУС -->
+
         <div class="progress-status" id="progressStatus">
             Изучено: 1/10 карточек
         </div>
         
-        <!-- КНОПКА ТЕСТА -->
+
         <div class="test-btn-container">
             <button class="test-btn" id="testBtn">
                 🎯 Пройти тест по теме
             </button>
         </div>
         
-        <!-- ИНФОРМАЦИЯ О ТЕМЕ -->
+
         <div class="module">
             📂 <strong>Тема 1: Основы экономики</strong> • Карточки 1-10 • Пройдите тест для разблокировки следующей темы
         </div>
     </div>
 
-    <!-- ФУТЕР -->
+
     <div class="footer">
         <div class="footer-content">
             <h3 class="footer-title">📬 Свяжитесь с нами</h3>
@@ -1001,7 +1001,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ФОРМЫ ОБРАТНОЙ СВЯЗИ -->
+
     <div class="modal-overlay" id="feedbackModal">
         <div class="modal">
             <button class="modal-close" id="modalClose">×</button>
@@ -1060,7 +1060,7 @@
     </div>
 
     <script>
-        // БАЗА ДАННЫХ КАРТОЧЕК ТЕМЫ 1
+
         const cardsData = [
             {
                 id: 1,
@@ -1194,7 +1194,7 @@
             }
         ];
 
-        // ПЕРЕМЕННЫЕ ДЛЯ КАРТОЧЕК
+
         let currentCardIndex = 0;
         const totalCards = cardsData.length;
         const cardElement = document.getElementById('card');
@@ -1203,13 +1203,13 @@
         const nextArrow = document.getElementById('nextArrow');
         const cardIndicators = document.getElementById('cardIndicators');
         
-        // ДЛЯ СВАЙПА
+
         let touchStartX = 0;
         let touchEndX = 0;
         const SWIPE_THRESHOLD = 50;
         let isAnimating = false;
 
-        // ПЕРЕМЕННЫЕ ДЛЯ МОДАЛЬНОГО ОКНА
+
         const feedbackModal = document.getElementById('feedbackModal');
         const modalClose = document.getElementById('modalClose');
         const emailBtn = document.getElementById('emailBtn');
@@ -1227,11 +1227,7 @@
         const supportLink = document.getElementById('supportLink');
         const feedbackLink = document.getElementById('feedbackLink');
 
-        /* ======================== */
-        /* ФУНКЦИИ ДЛЯ КАРТОЧЕК */
-        /* ======================== */
 
-        // ФУНКЦИЯ СОЗДАНИЯ ИНДИКАТОРОВ
         function createIndicators() {
             cardIndicators.innerHTML = '';
             for (let i = 0; i < totalCards; i++) {
@@ -1250,7 +1246,7 @@
             }
         }
 
-        // ФУНКЦИЯ ПЕРЕХОДА К КОНКРЕТНОЙ КАРТОЧКЕ
+
         function goToCard(index) {
             if (index === currentCardIndex || isAnimating) return;
             
@@ -1259,16 +1255,16 @@
             updateCard(direction);
         }
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ КАРТОЧКИ
+
         function updateCard(animationDirection = null) {
             if (isAnimating) return;
             
             const card = cardsData[currentCardIndex];
             
-            // Устанавливаем флаг анимации
+
             isAnimating = true;
             
-            // Анимация смены карточки
+
             if (animationDirection === 'next') {
                 cardElement.classList.add('slide-out-left');
                 setTimeout(() => {
@@ -1296,29 +1292,29 @@
                 isAnimating = false;
             }
             
-            // Обновляем индикаторы
+
             updateIndicators();
             
-            // Обновляем статус прогресса
+
             updateProgressStatus();
             
-            // Проверяем, можно ли пройти тест
+
             checkTestAvailability();
         }
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ СОДЕРЖИМОГО КАРТОЧКИ
+
         function updateCardContent(card) {
-            // Обновляем переднюю сторону
+
             document.getElementById('cardTitle').textContent = card.title;
             document.getElementById('cardNumFront').textContent = `#${card.id}`;
             document.getElementById('cardNumBack').textContent = `#${card.id}`;
             
-            // Обновляем обратную сторону
+
             document.getElementById('definitionText').textContent = card.definition;
             document.getElementById('simpleText').textContent = card.simple;
             document.getElementById('exampleText').textContent = card.example;
             
-            // Обновляем ключевые моменты
+
             const keyPointsList = document.getElementById('keyPoints');
             keyPointsList.innerHTML = '';
             card.keyPoints.forEach(point => {
@@ -1327,31 +1323,31 @@
                 keyPointsList.appendChild(li);
             });
             
-            // Обновляем прогресс
+
             document.getElementById('progressText').textContent = 
                 `Карточка ${currentCardIndex + 1} из ${totalCards}`;
             
             const progressPercentage = ((currentCardIndex + 1) / totalCards) * 100;
             document.getElementById('progressFill').style.width = `${progressPercentage}%`;
             
-            // Сбрасываем карточку в неперевернутое состояние
+
             cardElement.classList.remove('flipped');
             cardElement.classList.add('smooth-flip');
             
-            // Сбрасываем скролл обратной стороны
+
             const cardBack = document.querySelector('.card-back');
             if (cardBack) {
                 cardBack.scrollTop = 0;
             }
             
-            // Обновляем состояние стрелок
+
             prevArrow.disabled = currentCardIndex === 0;
             nextArrow.disabled = currentCardIndex === totalCards - 1;
         }
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ ИНДИКАТОРОВ
+
         function updateIndicators() {
-            // Обновляем круглые индикаторы
+
             const indicators = document.querySelectorAll('.card-indicator');
             indicators.forEach((indicator, index) => {
                 indicator.classList.remove('active', 'visited');
@@ -1363,9 +1359,9 @@
             });
         }
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ СТАТУСА ПРОГРЕССА
+
         function updateProgressStatus() {
-            // Сохраняем прогресс в localStorage
+
             const studiedCards = Math.max(currentCardIndex + 1, parseInt(localStorage.getItem('topic1_studied_cards') || '0'));
             localStorage.setItem('topic1_studied_cards', studiedCards);
             
@@ -1376,10 +1372,10 @@
                 `Изучено: ${studiedCards}/${totalCards} карточек (${studiedPercentage}%)`;
         }
 
-        // ФУНКЦИЯ ПРОВЕРКИ ДОСТУПНОСТИ ТЕСТА
+
         function checkTestAvailability() {
             const studiedCards = parseInt(localStorage.getItem('topic1_studied_cards') || '0');
-            const canTakeTest = studiedCards >= 8; // Можно пройти тест после изучения 8 из 10 карточек
+            const canTakeTest = studiedCards >= 8;
             
             testBtn.disabled = !canTakeTest;
             
@@ -1392,19 +1388,19 @@
             }
         }
 
-        // ФУНКЦИЯ ПЛАВНОГО ПЕРЕВОРОТА КАРТОЧКИ
+
         function flipCard() {
             if (isAnimating) return;
             
             cardElement.classList.toggle('flipped');
             
-            // Убираем класс smooth-flip после анимации
+
             setTimeout(() => {
                 cardElement.classList.remove('smooth-flip');
             }, 600);
         }
 
-        // НАВИГАЦИЯ СТРЕЛКАМИ
+
         prevArrow.addEventListener('click', () => {
             if (currentCardIndex > 0 && !isAnimating) {
                 currentCardIndex--;
@@ -1419,36 +1415,36 @@
             }
         });
 
-        // ПЕРЕВОРОТ КАРТОЧКИ
+
         cardElement.addEventListener('click', flipCard);
 
-        // КНОПКА ТЕСТА
+
         testBtn.addEventListener('click', () => {
             window.location.href = 'test_topic1.html';
         });
 
-        // КНОПКА НАЗАД
+
         document.getElementById('backBtn').addEventListener('click', () => {
             window.location.href = 'topics.html';
         });
 
-        // ФУНКЦИЯ СВАЙПА
+
         function handleSwipe() {
             const swipeDistance = touchEndX - touchStartX;
             
-            // Свайп влево (следующая карточка)
+
             if (swipeDistance < -SWIPE_THRESHOLD && currentCardIndex < totalCards - 1) {
                 currentCardIndex++;
                 updateCard('next');
             }
-            // Свайп вправо (предыдущая карточка)
+
             else if (swipeDistance > SWIPE_THRESHOLD && currentCardIndex > 0) {
                 currentCardIndex--;
                 updateCard('prev');
             }
         }
 
-        // ОБРАБОТКА КАСАНИЙ ДЛЯ СВАЙПА
+
         cardElement.addEventListener('touchstart', (e) => {
             if (isAnimating) return;
             touchStartX = e.changedTouches[0].screenX;
@@ -1460,7 +1456,7 @@
             handleSwipe();
         }, { passive: true });
 
-        // ОБРАБОТКА МЫШИ ДЛЯ ПК (перетаскивание)
+
         let mouseDownX = 0;
         let mouseUpX = 0;
         
@@ -1485,7 +1481,7 @@
             }
         });
 
-        // УПРАВЛЕНИЕ КЛАВИАТУРОЙ
+
         document.addEventListener('keydown', (e) => {
             if (isAnimating) return;
             
@@ -1524,25 +1520,21 @@
             }
         });
 
-        /* ======================== */
-        /* ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА */
-        /* ======================== */
 
-        // ОТКРЫТИЕ МОДАЛЬНОГО ОКНА
         function openModal() {
             feedbackModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Блокируем скролл страницы
-            userName.focus(); // Фокус на первое поле
+            document.body.style.overflow = 'hidden';
+            userName.focus();
         }
 
-        // ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
+
         function closeModal() {
             feedbackModal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Возвращаем скролл
-            resetForm(); // Сбрасываем форму
+            document.body.style.overflow = 'auto';
+            resetForm();
         }
 
-        // СБРОС ФОРМЫ
+
         function resetForm() {
             feedbackForm.reset();
             charCount.textContent = '0';
@@ -1553,7 +1545,7 @@
             loadingSpinner.style.display = 'none';
         }
 
-        // СЧЕТЧИК СИМВОЛОВ
+
         messageText.addEventListener('input', () => {
             const length = messageText.value.length;
             charCount.textContent = length;
@@ -1569,22 +1561,22 @@
             }
         });
 
-        // ПОКАЗ СТАТУСА ОТПРАВКИ
+
         function showStatus(message, isSuccess) {
             statusMessage.textContent = message;
             statusMessage.className = `status-message ${isSuccess ? 'status-success' : 'status-error'}`;
             statusMessage.style.display = 'block';
             
-            // Автоматически скрываем через 5 секунд
+
             setTimeout(() => {
                 statusMessage.style.display = 'none';
             }, 5000);
         }
 
-        // ИМИТАЦИЯ ОТПРАВКИ ПИСЬМА
+
         function simulateEmailSending(formData) {
             return new Promise((resolve) => {
-                // Создаем визуализацию отправки
+
                 const steps = [
                     "Подготовка письма...",
                     "Проверка данных...",
@@ -1594,7 +1586,7 @@
                 
                 let currentStep = 0;
                 
-                // Показываем процесс отправки
+
                 const interval = setInterval(() => {
                     if (currentStep < steps.length) {
                         submitText.textContent = steps[currentStep];
@@ -1602,7 +1594,7 @@
                     } else {
                         clearInterval(interval);
                         
-                        // Успешная отправка
+
                         setTimeout(() => {
                             resolve({
                                 success: true,
@@ -1614,49 +1606,47 @@
             });
         }
 
-        // ОТПРАВКА ФОРМЫ
+
         async function submitFeedbackForm(event) {
             event.preventDefault();
             
-            // Проверка валидности
+
             if (!userName.value.trim() || !userEmail.value.trim() || !messageTopic.value || !messageText.value.trim()) {
                 showStatus('Пожалуйста, заполните все обязательные поля', false);
                 return;
             }
             
-            // Проверка email
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(userEmail.value)) {
                 showStatus('Пожалуйста, введите корректный email', false);
                 return;
             }
             
-            // Подготовка данных формы
+
             const formData = {
                 name: userName.value.trim(),
                 email: userEmail.value.trim(),
                 topic: getTopicText(messageTopic.value),
                 message: messageText.value.trim(),
                 date: new Date().toLocaleString('ru-RU'),
-                ip: '127.0.0.1', // Имитация IP
+                ip: '127.0.0.1',
                 userAgent: navigator.userAgent
             };
             
-            // Показываем загрузку
+
             submitBtn.disabled = true;
             submitText.textContent = 'Начинаем отправку...';
             loadingSpinner.style.display = 'block';
             statusMessage.style.display = 'none';
             
             try {
-                // Имитируем отправку письма
                 const result = await simulateEmailSending(formData);
                 
                 if (result.success) {
-                    // Успешная отправка
                     showStatus(result.message, true);
                     
-                    // Логируем в консоль (в реальном проекте тут был бы запрос на сервер)
+
                     console.log('=== СООБЩЕНИЕ ОТПРАВЛЕНО ===');
                     console.log('От:', formData.name);
                     console.log('Email:', formData.email);
@@ -1667,10 +1657,10 @@
                     console.log('Браузер:', formData.userAgent);
                     console.log('============================');
                     
-                    // Очищаем форму через 2 секунды
+
                     setTimeout(() => {
                         resetForm();
-                        // Закрываем модальное окно через 3 секунды
+
                         setTimeout(() => {
                             closeModal();
                         }, 1000);
@@ -1683,14 +1673,14 @@
                 console.error('Ошибка отправки:', error);
                 showStatus('❌ Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.', false);
                 
-                // Восстанавливаем кнопку
+
                 submitBtn.disabled = false;
                 submitText.textContent = '📨 Отправить сообщение';
                 loadingSpinner.style.display = 'none';
             }
         }
 
-        // ФУНКЦИЯ ПОЛУЧЕНИЯ ТЕКСТА ТЕМЫ
+
         function getTopicText(topicValue) {
             const topics = {
                 'question': 'Вопрос по материалу',
@@ -1701,12 +1691,12 @@
             return topics[topicValue] || 'Другое';
         }
 
-        // ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ МОДАЛЬНОГО ОКНА
 
-        // Открытие модального окна
+
+
         emailBtn.addEventListener('click', openModal);
         
-        // Клик по ссылкам в футере тоже открывает форму
+
         emailLink.addEventListener('click', (e) => {
             e.preventDefault();
             openModal();
@@ -1722,28 +1712,24 @@
             openModal();
         });
 
-        // Закрытие модального окна
+
         modalClose.addEventListener('click', closeModal);
         
-        // Закрытие по клику на оверлей
+
         feedbackModal.addEventListener('click', (e) => {
             if (e.target === feedbackModal) {
                 closeModal();
             }
         });
 
-        // Отправка формы
+
         feedbackForm.addEventListener('submit', submitFeedbackForm);
 
-        /* ======================== */
-        /* ИНИЦИАЛИЗАЦИЯ */
-        /* ======================== */
 
-        // Инициализация карточек
         createIndicators();
         updateCard();
         
-        // Адаптивность стрелок
+
         function updateArrowPositions() {
             const isMobile = window.innerWidth <= 900;
             if (isMobile) {
@@ -1762,11 +1748,11 @@
         window.addEventListener('resize', updateArrowPositions);
         updateArrowPositions();
         
-        // Загрузка прогресса при начале
+
         window.addEventListener('load', () => {
             const savedProgress = localStorage.getItem('topic1_studied_cards');
             if (savedProgress) {
-                // Можно автоматически перейти к последней изученной карточке
+
             }
             checkTestAvailability();
         });

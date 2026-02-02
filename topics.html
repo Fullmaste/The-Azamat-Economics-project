@@ -545,18 +545,18 @@
     </div>
 
 <script>
-    // СИСТЕМА РАЗБЛОКИРОВКИ ТЕМ
+
     const unlockRequirements = {
-        1: null, // Первая тема всегда открыта
-        2: 'topic1_passed', // Тема 2 открывается после темы 1
-        3: 'topic2_passed', // Тема 3 после темы 2
-        4: 'topic3_passed', // И так далее...
+        1: null,
+        2: 'topic1_passed',
+        3: 'topic2_passed',
+        4: 'topic3_passed',
         5: 'topic4_passed',
         6: 'topic5_passed',
         7: 'topic6_passed'
     };
 
-    // СООТВЕТСТВИЕ ТЕМ И ФАЙЛОВ
+
     const topicPages = {
         1: 'study_topic1.html',
         2: 'study_topic2.html',
@@ -567,7 +567,7 @@
         7: 'study_topic7.html'
     };
 
-    // ФУНКЦИЯ ПРОВЕРКИ РАЗБЛОКИРОВКИ ТЕМ
+
     function checkUnlockedTopics() {
         for (let topicId = 1; topicId <= 7; topicId++) {
             const card = document.getElementById(`topic${topicId}`);
@@ -576,61 +576,61 @@
             const requirement = unlockRequirements[topicId];
             
             if (requirement === null) {
-                // Первая тема всегда открыта
+
                 unlockTopicCard(card, topicId);
                 continue;
             }
             
-            // Проверяем, пройден ли предыдущий тест
+
             const isUnlocked = localStorage.getItem(requirement) === 'true';
             
             if (isUnlocked) {
-                // Разблокируем тему
+
                 unlockTopicCard(card, topicId);
             } else {
-                // Блокируем тему
+
                 lockTopicCard(card, topicId);
             }
         }
     }
 
-    // ФУНКЦИЯ РАЗБЛОКИРОВКИ КАРТОЧКИ ТЕМЫ
+
     function unlockTopicCard(card, topicId) {
         card.classList.remove('locked');
         card.classList.remove('coming-soon');
         
-        // Убираем иконку замка
+
         const lockIcon = card.querySelector('.lock-icon');
         if (lockIcon) lockIcon.remove();
         
-        // Обновляем статус
+
         const statusDiv = card.querySelector('.topic-status');
         if (statusDiv) {
             statusDiv.innerHTML = '<span>✅ Доступна для изучения</span>';
             statusDiv.className = 'topic-status status-available';
         }
         
-        // Обновляем бейдж
+
         const badge = card.querySelector('.topic-badge');
         if (badge && badge.classList.contains('locked-badge')) {
             badge.textContent = '10 карточек';
             badge.className = 'topic-badge';
         }
         
-        // Убираем требование
+
         const reqDiv = card.querySelector('.unlock-requirement');
         if (reqDiv) reqDiv.remove();
         
-        // Добавляем обработчик клика
+
         card.addEventListener('click', () => handleTopicClick(topicId));
     }
 
-    // ФУНКЦИЯ БЛОКИРОВКИ КАРТОЧКИ ТЕМЫ
+
     function lockTopicCard(card, topicId) {
         card.classList.add('locked');
         card.classList.remove('unlocked');
         
-        // Добавляем иконку замка если ее нет
+
         if (!card.querySelector('.lock-icon')) {
             const lockIcon = document.createElement('div');
             lockIcon.className = 'lock-icon';
@@ -638,7 +638,7 @@
             card.insertBefore(lockIcon, card.firstChild);
         }
         
-        // Обновляем статус
+
         const statusDiv = card.querySelector('.topic-status');
         if (statusDiv) {
             const prevTopic = topicId - 1;
@@ -646,14 +646,14 @@
             statusDiv.className = 'topic-status status-locked';
         }
         
-        // Обновляем бейдж
+
         const badge = card.querySelector('.topic-badge');
         if (badge && !badge.classList.contains('locked-badge')) {
             badge.textContent = 'Заблокировано';
             badge.className = 'topic-badge locked-badge';
         }
         
-        // Добавляем требование
+
         let reqDiv = card.querySelector('.unlock-requirement');
         if (!reqDiv) {
             reqDiv = document.createElement('div');
@@ -665,19 +665,18 @@
         }
         reqDiv.textContent = `Требуется: завершить тему ${topicId - 1}`;
         
-        // Удаляем обработчик клика
+
         card.removeEventListener('click', () => handleTopicClick(topicId));
     }
 
-    // ОБРАБОТКА КЛИКОВ ПО КАРТОЧКАМ ТЕМ
     function handleTopicClick(topicId) {
-        // Проверяем, не заблокирована ли тема
+
         const card = document.getElementById(`topic${topicId}`);
         if (!card || card.classList.contains('locked') || card.classList.contains('coming-soon')) {
             return;
         }
         
-        // Проверяем, разблокирована ли тема
+
         const requirement = unlockRequirements[topicId];
         if (requirement && requirement !== null) {
             const isUnlocked = localStorage.getItem(requirement) === 'true';
@@ -687,21 +686,21 @@
             }
         }
         
-        // Переход на страницу изучения темы
+
         const page = topicPages[topicId];
         if (page) {
-            // Проверяем существует ли страница
+
             fetch(page)
                 .then(response => {
                     if (response.ok) {
                         window.location.href = page;
                     } else {
-                        // Если страница не существует, показываем сообщение
+
                         showComingSoonMessage(topicId);
                     }
                 })
                 .catch(() => {
-                    // В случае ошибки сети тоже показываем сообщение
+
                     showComingSoonMessage(topicId);
                 });
         } else {
@@ -709,7 +708,7 @@
         }
     }
     
-    // ФУНКЦИЯ ПОКАЗА СООБЩЕНИЯ "СКОРО"
+
     function showComingSoonMessage(topicId) {
         const topicNames = {
             1: 'Основы экономики',
@@ -725,14 +724,14 @@
         alert(`Тема "${topicName}" в разработке. Скоро будет доступна!`);
     }
     
-    // КНОПКА НАЗАД
+
     document.getElementById('backBtn').addEventListener('click', () => {
         window.location.href = 'index.html';
     });
     
-    // ЗАГРУЗКА ПРОГРЕССА ИЗ LOCALSTORAGE
+
     function loadProgress() {
-        // Прогресс по всем темам
+
         let totalProgressSum = 0;
         let topicCount = 0;
         let completedTopics = 0;
@@ -748,29 +747,26 @@
         };
         
         for (let topicId = 1; topicId <= 7; topicId++) {
-            // Проверяем, есть ли прогрессбар для этой темы
+
             const progressElement = document.getElementById(`progress${topicId}`);
             const progressBar = document.getElementById(`progressBar${topicId}`);
             
-            // Если элементов нет, создаем их для тем 3-7
+
             if (!progressElement && topicId >= 3) {
                 createProgressElement(topicId, topicNames[topicId]);
             }
-            
-            // Теперь снова пытаемся найти элементы
+
             const currentProgressElement = document.getElementById(`progress${topicId}`);
             const currentProgressBar = document.getElementById(`progressBar${topicId}`);
             
             if (currentProgressElement && currentProgressBar) {
-                // Получаем прогресс изучения карточек
+
                 const studiedProgress = localStorage.getItem(`topic${topicId}_progress`) || 0;
                 const studiedPercentage = parseInt(studiedProgress);
                 
-                // Проверяем, пройден ли тест
+
                 const testPassed = localStorage.getItem(`topic${topicId}_passed`) === 'true';
-                
-                // Если тест пройден, прогресс = 100%
-                // Если не пройден, но карточки изучались, показываем прогресс карточек
+
                 let progress = 0;
                 if (testPassed) {
                     progress = 100;
@@ -782,7 +778,7 @@
                 currentProgressElement.textContent = `${progress}%`;
                 currentProgressBar.style.width = `${progress}%`;
                 
-                // Если тест пройден, добавляем иконку ✅
+
                 if (testPassed) {
                     currentProgressElement.innerHTML = `✅ ${progress}%`;
                 }
@@ -792,7 +788,7 @@
             }
         }
         
-        // Общий прогресс
+
         if (topicCount > 0) {
             const totalProgress = Math.round(totalProgressSum / topicCount);
             const totalProgressElement = document.getElementById('totalProgress');
@@ -802,23 +798,23 @@
                 totalProgressElement.textContent = `${totalProgress}%`;
                 totalProgressBar.style.width = `${totalProgress}%`;
                 
-                // Обновляем текст общего прогресса
+
                 document.querySelector('#totalProgress').previousElementSibling.textContent = 
                     `Всего пройдено (${completedTopics}/7 тем)`;
             }
         }
         
-        // Обновляем ачивки
+
         updateAchievements();
     }
     
-    // ФУНКЦИЯ СОЗДАНИЯ ЭЛЕМЕНТА ПРОГРЕССА
+
     function createProgressElement(topicId, topicName) {
         const progressContainer = document.querySelector('.overall-progress');
         const totalProgressItem = document.querySelector('.progress-item:last-of-type');
         
         if (progressContainer && totalProgressItem) {
-            // Создаем новый элемент прогресса
+
             const newProgressItem = document.createElement('div');
             newProgressItem.className = 'progress-item';
             newProgressItem.innerHTML = `
@@ -831,14 +827,14 @@
                 </div>
             `;
             
-            // Вставляем перед последним элементом (перед "Всего пройдено")
+
             progressContainer.insertBefore(newProgressItem, totalProgressItem);
         }
     }
     
-    // ФУНКЦИЯ ОБНОВЛЕНИЯ АЧИВОК
+
     function updateAchievements() {
-        // Ачивка 1: Начало обучения (всегда есть при первом заходе)
+
         if (localStorage.getItem('first_visit') === 'true') {
             const ach1 = document.getElementById('ach1');
             if (ach1) {
@@ -847,7 +843,7 @@
             }
         }
         
-        // Проверяем все ачивки
+
         const achievements = [
             { 
                 id: 'ach2', 
@@ -914,20 +910,20 @@
         });
     }
     
-    // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+
     window.addEventListener('load', () => {
-        // Отмечаем первый визит
+
         if (!localStorage.getItem('first_visit')) {
             localStorage.setItem('first_visit', 'true');
         }
         
-        // Проверяем разблокированные темы
+
         checkUnlockedTopics();
         
-        // Загружаем прогресс
+
         loadProgress();
         
-        // Создаем прогрессбары для всех тем
+
         const topicNames = {
             1: 'Основы экономики',
             2: 'Личные финансы',
@@ -945,11 +941,11 @@
             }
         }
         
-        // Обновляем прогресс еще раз после создания всех элементов
+
         setTimeout(loadProgress, 100);
     });
     
-    // ФУНКЦИЯ ПОЛУЧЕНИЯ ИМЕНИ ТЕМЫ
+
     function getTopicName(topicId) {
         const topicNames = {
             1: 'Основы экономики',
@@ -963,10 +959,10 @@
         return topicNames[topicId] || `Тема ${topicId}`;
     }
     
-    // АНИМАЦИЯ ПРИ НАВЕДЕНИИ (только для разблокированных тем)
+
     function setupHoverEffects() {
         document.querySelectorAll('.topic-card').forEach(card => {
-            // Только для не заблокированных тем
+
             if (!card.classList.contains('locked') && !card.classList.contains('coming-soon')) {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
@@ -983,11 +979,10 @@
         });
     }
     
-    // Вызываем настройку эффектов наведения после загрузки
+
     setTimeout(setupHoverEffects, 100);
     
-    // ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОГРЕССА В РЕАЛЬНОМ ВРЕМЕНИ
-    // (можно вызвать после прохождения теста)
+
     function updateTopicProgress(topicId) {
         const progressElement = document.getElementById(`progress${topicId}`);
         const progressBar = document.getElementById(`progressBar${topicId}`);
@@ -1007,13 +1002,13 @@
             
             progressBar.style.width = `${progress}%`;
             
-            // Пересчитываем общий прогресс
+
             recalculateTotalProgress();
             updateAchievements();
         }
     }
     
-    // ФУНКЦИЯ ПЕРЕСЧЕТА ОБЩЕГО ПРОГРЕССА
+
     function recalculateTotalProgress() {
         let totalProgressSum = 0;
         let topicCount = 0;
@@ -1043,14 +1038,14 @@
                 totalProgressElement.textContent = `${totalProgress}%`;
                 totalProgressBar.style.width = `${totalProgress}%`;
                 
-                // Обновляем текст
+
                 document.querySelector('#totalProgress').previousElementSibling.textContent = 
                     `Всего пройдено (${completedTopics}/7 тем)`;
             }
         }
     }
     
-    // Добавляем слушатель для обновления прогресса при возврате на страницу
+
     window.addEventListener('focus', () => {
         loadProgress();
     });

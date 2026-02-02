@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Тест карточки</title>
     <style>
-        /* МИНИМАЛЬНЫЙ РАБОЧИЙ CSS */
+
         .card-container {
             width: 100%;
             max-width: 600px;
@@ -74,13 +74,13 @@
         
         <div class="card-container">
             <div class="card" id="card">
-                <!-- ПЕРЕДНЯЯ СТОРОНА -->
+
                 <div class="card-front">
                     <div class="card-title">Что такое экономика?</div>
                     <p>Нажми на карточку или кнопку ниже</p>
                 </div>
                 
-                <!-- ОБОРОТНАЯ СТОРОНА -->
+
                 <div class="card-back">
                     <h3>Объяснение:</h3>
                     <p>Экономика — это наука о том, как общество использует ограниченные ресурсы.</p>
@@ -108,29 +108,29 @@
         const card = document.getElementById('card');
         const statusSpan = document.getElementById('status');
         
-        // Функция переворота
+
         function flipCard() {
             console.log('Кнопка нажата!');
             card.classList.toggle('flipped');
             updateStatus();
         }
         
-        // Функция сброса
+
         function resetCard() {
             card.classList.remove('flipped');
             updateStatus();
         }
         
-        // Обновление статуса
+
         function updateStatus() {
             statusSpan.textContent = card.className;
             console.log('Класс карточки:', card.className);
         }
         
-        // Клик по карточке
+
         card.addEventListener('click', flipCard);
         
-        // Управление с клавиатуры
+
         document.addEventListener('keydown', function(e) {
             if (e.key === ' ' || e.key === 'Spacebar') {
                 flipCard();
@@ -141,7 +141,7 @@
             }
         });
         
-        // Инициализация
+
         updateStatus();
     </script>
 </body>
