@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мировая экономика - Экономика с нуля</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            touch-action: pan-y;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        }
+        
+        .progress {
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #3498db);
+            width: 10%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .card-container {
+            width: 100%;
+            height: 450px;
+            margin: 20px auto;
+            perspective: 1000px;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .card-back {
+            background: white;
+            color: #333;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            justify-content: flex-start;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .card-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .card-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            text-align: center;
+            width: 100%;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #3498db;
+            z-index: 100;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+        
+        .nav-arrow:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%);
+        }
+        
+        .nav-arrow:disabled:hover {
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .prev-arrow {
+            left: -70px;
+        }
+        
+        .next-arrow {
+            right: -70px;
+        }
+        
+        .test-btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .test-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .test-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .test-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+        
+        .test-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+        
+        .explanation {
+            margin-bottom: 20px;
+        }
+        
+        .explanation h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        
+        .explanation p, .explanation ul {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .explanation ul {
+            padding-left: 20px;
+        }
+        
+        .explanation li {
+            margin-bottom: 8px;
+        }
+        
+        .card-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+            padding: 10px;
+        }
+        
+        .card-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .card-indicator:hover {
+            transform: scale(1.2);
+            background: #bbb;
+        }
+        
+        .card-indicator.active {
+            background: #3498db;
+            transform: scale(1.4);
+            border-color: white;
+            box-shadow: 0 0 0 2px #3498db;
+        }
+        
+        .card-indicator.visited {
+            background: #7f8c8d;
+        }
+        
+        .swipe-hint {
+            text-align: center;
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .module {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            color: #7f8c8d;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .progress-status {
+            text-align: center;
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 15px 15px 0 0;
+            padding: 40px 20px 30px;
+            margin-top: 40px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-title {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .contact-icon {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-value {
+            color: #3498db;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-value:hover {
+            color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .email-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin-top: 15px;
+        }
+        
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #e74c3c;
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237f8c8d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        
+        .modal-submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .modal-submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .modal-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .status-success {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #27ae60;
+        }
+        
+        .status-error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .prev-arrow {
+                left: -60px;
+            }
+            
+            .next-arrow {
+                right: -60px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .prev-arrow {
+                left: 10px;
+                background: rgba(255, 255, 255, 0.8);
+            }
+            
+            .next-arrow {
+                right: 10px;
+                background: rgba(255, 255, 255, 0.8);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .card-container {
+                height: 500px;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .card-front, .card-back {
+                padding: 20px;
+            }
+            
+            .progress-bar {
+                width: 200px;
+            }
+            
+            .swipe-hint {
+                display: block;
+            }
+            
+            .nav-arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .modal {
+                padding: 30px 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.7rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card-container {
+                height: 550px;
+            }
+            
+            .card-title {
+                font-size: 1.3rem;
+            }
+            
+            .progress {
+                width: 100%;
+            }
+            
+            .progress-bar {
+                width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .test-btn {
+                width: 100%;
+                padding: 16px 20px;
+            }
+            
+            .card-indicator {
+                width: 12px;
+                height: 12px;
+            }
+            
+            .card-indicator.active {
+                transform: scale(1.3);
+            }
+            
+            .footer {
+                padding: 30px 15px 20px;
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 25px 15px;
+            }
+        }
+        
+        .card.slide-out-left {
+            animation: smoothSlideOutLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .card.slide-in-right {
+            animation: smoothSlideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .card.slide-out-right {
+            animation: smoothSlideOutRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .card.slide-in-left {
+            animation: smoothSlideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes smoothSlideOutLeft {
+            0% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(-10%) rotateY(-5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(-100%) rotateY(-10deg) scale(0.95);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes smoothSlideInRight {
+            0% { 
+                transform: translateX(100%) rotateY(10deg) scale(0.95);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(10%) rotateY(5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes smoothSlideOutRight {
+            0% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(10%) rotateY(5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(100%) rotateY(10deg) scale(0.95);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes smoothSlideInLeft {
+            0% { 
+                transform: translateX(-100%) rotateY(-10deg) scale(0.95);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(-10%) rotateY(-5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .card.smooth-flip {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            }
+        }
+        
+        .test-btn.pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" id="backBtn">
+                ← К выбору тем
+            </button>
+            
+            <div class="progress">
+                <div id="progressText">Карточка 1 из 10</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="nav-arrow prev-arrow" id="prevArrow" title="Предыдущая карточка">
+            ←
+        </button>
+        
+        <button class="nav-arrow next-arrow" id="nextArrow" title="Следующая карточка">
+            →
+        </button>
+        
+        <div class="card-container">
+            <div class="card" id="card">
+                <div class="card-front">
+                    <div class="card-number" id="cardNumFront">#1</div>
+                    <h2 class="card-title" id="cardTitle">Глобализация мировой экономики</h2>
+                    <div class="hint">Кликните, чтобы перевернуть карточку</div>
+                </div>
+                
+                <div class="card-back">
+                    <div class="card-number" id="cardNumBack">#1</div>
+                    
+                    <div class="explanation">
+                        <h4>📖 Определение:</h4>
+                        <p id="definitionText">Глобализация — процесс усиления взаимозависимости стран и народов во всех сферах жизни: экономической, политической, культурной, технологической. Экономическая глобализация проявляется в свободном движении товаров, услуг, капитала и рабочей силы.</p>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>💡 Простыми словами:</h4>
+                        <p id="simpleText">Глобализация — это когда весь мир становится одной большой деревней, где страны торгуют друг с другом, компании работают по всему миру, а идеи и технологии мгновенно распространяются.</p>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>🎯 Ключевые моменты:</h4>
+                        <ul id="keyPoints"></ul>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>📊 Пример из жизни:</h4>
+                        <p id="exampleText">Ваш смартфон сделан в Китае из деталей производства Японии, Кореи и США, работает на операционной системе американской компании, а вы покупаете его в российском магазине за рубли — это глобализация в действии.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-indicators" id="cardIndicators"></div>
+        
+        <div class="swipe-hint">
+            👆 Свайпните влево/вправо для переключения карточек
+        </div>
+        
+        <div class="progress-status" id="progressStatus">
+            Изучено: 1/10 карточек
+        </div>
+        
+        <div class="test-btn-container">
+            <button class="test-btn" id="testBtn">
+                🎯 Пройти тест по теме
+            </button>
+        </div>
+        
+        <div class="module">
+            📂 <strong>Тема 5: Мировая экономика</strong> • Карточки 1-10 • Пройдите тест для разблокировки следующей темы
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">📬 Свяжитесь с нами</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-label">Электронная почта</div>
+                    <a href="#" class="contact-value" id="emailLink">
+                        admin@economika-s-nulya.ru
+                    </a>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-label">Техническая поддержка</div>
+                    <a href="#" class="contact-value" id="supportLink">
+                        support@economika-s-nulya.ru
+                    </a>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">🚀</div>
+                    <div class="contact-label">Предложения по улучшению</div>
+                    <a href="#" class="contact-value" id="feedbackLink">
+                        feedback@economika-s-nulya.ru
+                    </a>
+                </div>
+            </div>
+            
+            <button class="email-btn" id="emailBtn">
+                <span>✉️</span>
+                Написать администратору
+            </button>
+            
+            <div class="copyright">
+                <p>© 2026 Экономика с нуля. Все права защищены.</p>
+                <p style="margin-top: 5px; font-size: 0.8rem;">Образовательный проект для изучения экономики с нуля</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="feedbackModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">×</button>
+            
+            <h1 class="modal-title">✉️ Написать администратору</h1>
+            <p class="modal-subtitle">
+                Есть вопросы, предложения или нашли ошибку? Напишите нам, и мы обязательно ответим!
+            </p>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label class="form-label">
+                        Ваше имя <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="userName" placeholder="Как к вам обращаться?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Email для ответа <span class="required">*</span>
+                    </label>
+                    <input type="email" class="form-input" id="userEmail" placeholder="example@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Тема сообщения <span class="required">*</span>
+                    </label>
+                    <select class="form-select" id="messageTopic" required>
+                        <option value="" disabled selected>Выберите тему</option>
+                        <option value="question">Вопрос по материалу</option>
+                        <option value="bug">Сообщить об ошибке</option>
+                        <option value="suggestion">Предложение по улучшению</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Ваше сообщение <span class="required">*</span>
+                    </label>
+                    <textarea class="form-textarea" id="messageText" placeholder="Опишите ваш вопрос или предложение подробно..." required></textarea>
+                    <div class="char-counter">
+                        <span id="charCount">0</span>/1000 символов
+                    </div>
+                </div>
+                
+                <button type="submit" class="modal-submit-btn" id="submitBtn">
+                    <span id="submitText">📨 Отправить сообщение</span>
+                    <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
+                </button>
+            </form>
+            
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        const cardsData = [
+            {
+                id: 1,
+                title: "Глобализация мировой экономики",
+                definition: "Глобализация — процесс усиления взаимозависимости стран и народов во всех сферах жизни: экономической, политической, культурной, технологической. Экономическая глобализация проявляется в свободном движении товаров, услуг, капитала и рабочей силы.",
+                simple: "Глобализация — это когда весь мир становится одной большой деревней, где страны торгуют друг с другом, компании работают по всему миру, а идеи и технологии мгновенно распространяются.",
+                keyPoints: [
+                    "Создание глобальных производственных цепочек",
+                    "Развитие международной торговли",
+                    "Свободное движение капитала",
+                    "Культурный и информационный обмен"
+                ],
+                example: "Ваш смартфон сделан в Китае из деталей производства Японии, Кореи и США, работает на операционной системе американской компании, а вы покупаете его в российском магазине за рубли — это глобализация в действии."
+            },
+            {
+                id: 2,
+                title: "Международные экономические организации",
+                definition: "Международные экономические организации — межгосударственные объединения, созданные для регулирования экономических отношений между странами, решения глобальных проблем и содействия экономическому развитию.",
+                simple: "Это как клубы для стран, где они договариваются о правилах торговли, помогают друг другу в трудные времена и решают общие проблемы.",
+                keyPoints: [
+                    "Всемирная торговая организация (ВТО) — регулирует международную торговлю",
+                    "Международный валютный фонд (МВФ) — помогает странам с платежными балансами",
+                    "Всемирный банк — финансирует развитие бедных стран",
+                    "Организация экономического сотрудничества и развития (ОЭСР)"
+                ],
+                example: "Россия вступила в ВТО в 2012 году, что потребовало снижения импортных пошлин и привело к увеличению импорта потребительских товаров."
+            },
+            {
+                id: 3,
+                title: "Транснациональные корпорации",
+                definition: "Транснациональные корпорации (ТНК) — крупные компании, имеющие филиалы и дочерние предприятия в нескольких странах мира. Они организуют производство и сбыт продукции на глобальном уровне.",
+                simple: "ТНК — это экономические гиганты, которые не признают границ: они добывают ресурсы в одних странах, производят в других, а продают по всему миру.",
+                keyPoints: [
+                    "Контролируют значительную часть мирового производства",
+                    "Имеют огромные финансовые ресурсы",
+                    "Влияют на экономическую политику стран",
+                    "Создают рабочие места по всему миру"
+                ],
+                example: "Компания Apple — американская ТНК, которая проектирует продукцию в США, производит в Китае, а продает по всему миру. Ее рыночная капитализация превышает ВВП многих стран."
+            },
+            {
+                id: 4,
+                title: "Международное разделение труда",
+                definition: "Международное разделение труда — специализация стран на производстве определенных товаров и услуг, в которых они имеют сравнительные преимущества, и обмен этими товарами на мировом рынке.",
+                simple: "Каждая страна делает то, что у нее получается лучше всего: Саудовская Аравия добывает нефть, Швейцария делает часы, Япония производит электронику, а все меняются друг с другом.",
+                keyPoints: [
+                    "Сравнительные преимущества — основа специализации",
+                    "Вертикальная специализация — разные стадии производства в разных странах",
+                    "Повышает эффективность мировой экономики",
+                    "Создает взаимозависимость стран"
+                ],
+                example: "Франция специализируется на производстве вина и парфюмерии, Германия — на автомобилях и машиностроении, Россия — на энергоресурсах и вооружении."
+            },
+            {
+                id: 5,
+                title: "Валютная система и валютные курсы",
+                definition: "Мировая валютная система — совокупность правил, инструментов и институтов, регулирующих международные расчеты и валютные отношения. Валютный курс — цена одной валюты, выраженная в другой валюте.",
+                simple: "Это правила игры для мировых денег: как страны обмениваются валютами, кто устанавливает курсы и что происходит, когда одна валюта дорожает или дешевеет относительно другой.",
+                keyPoints: [
+                    "Плавающий курс — определяется спросом и предложением",
+                    "Фиксированный курс — устанавливается государством",
+                    "Валютный коридор — ограниченные колебания курса",
+                    "Валютные интервенции — воздействие ЦБ на курс"
+                ],
+                example: "Евро был введен в 1999 году как единая валюта для стран Еврозоны. Это упростило торговлю между европейскими странами, но лишило их возможности проводить независимую денежную политику."
+            },
+            {
+                id: 6,
+                title: "Платежный баланс страны",
+                definition: "Платежный баланс — систематизированная запись всех экономических операций между резидентами данной страны и остальным миром за определенный период. Состоит из счета текущих операций и счета операций с капиталом.",
+                simple: "Это как семейная бухгалтерия, только для целой страны: сколько мы заработали за границей, сколько потратили за рубежом, сколько взяли в долг и сколько дали взаймы другим странам.",
+                keyPoints: [
+                    "Торговый баланс — разница между экспортом и импортом товаров",
+                    "Баланс услуг — разница между экспортом и импортом услуг",
+                    "Счет текущих операций — торговый баланс + баланс услуг + переводы",
+                    "Счет операций с капиталом — движение капитала"
+                ],
+                example: "У Китая много лет положительное сальдо торгового баланса (экспорт больше импорта), а у США — отрицательное (импорт больше экспорта)."
+            },
+            {
+                id: 7,
+                title: "Экономические интеграционные объединения",
+                definition: "Экономическая интеграция — процесс сближения и взаимоприспособления национальных экономик, включения их в единый хозяйственный комплекс. Проходит стадии от зоны свободной торговли до экономического союза.",
+                simple: "Это как ступени дружбы между странами: сначала просто дружат и не берут друг с друга пошлины, потом начинают вместе работать, а в итоге могут даже завести общие деньги и законы.",
+                keyPoints: [
+                    "Зона свободной торговли — отмена таможенных пошлин",
+                    "Таможенный союз — общий внешний тариф",
+                    "Общий рынок — свободное движение товаров, услуг, капитала и рабочей силы",
+                    "Экономический союз — гармонизация экономической политики"
+                ],
+                example: "Европейский союз прошел все стадии интеграции: от Европейского экономического сообщества до единой валюты (евро) и единого экономического пространства."
+            },
+            {
+                id: 8,
+                title: "Мировые финансовые рынки",
+                definition: "Мировые финансовые рынки — система отношений по купле-продаже финансовых активов (валют, акций, облигаций, деривативов) между участниками из разных стран. Включают валютный, кредитный, фондовый рынки.",
+                simple: "Это глобальная биржа, где страны, компании и инвесторы со всего мира торгуют деньгами, ценными бумагами и валютой 24 часа в сутки.",
+                keyPoints: [
+                    "Форекс — международный валютный рынок",
+                    "Еврооблигации — облигации в иностранной валюте",
+                    "АДР — американские депозитарные расписки на иностранные акции",
+                    "Офшорные зоны — территории с льготным налогообложением"
+                ],
+                example: "Ежедневный оборот рынка Форекс составляет более 6 триллионов долларов, что делает его крупнейшим финансовым рынком в мире."
+            },
+            {
+                id: 9,
+                title: "Глобальные экономические проблемы",
+                definition: "Глобальные экономические проблемы — проблемы, затрагивающие все страны мира и требующие совместных усилий для их решения. Возникают из-за противоречий между ограниченностью ресурсов и растущими потребностями человечества.",
+                simple: "Это такие большие беды, с которыми одна страна не справится — нужно объединяться всем миром, как при тушении большого пожара.",
+                keyPoints: [
+                    "Бедность и неравенство в распределении доходов",
+                    "Экологические проблемы и изменение климата",
+                    "Продовольственная безопасность",
+                    "Энергетическая проблема"
+                ],
+                example: "Изменение климата приводит к таянию ледников, повышению уровня моря и увеличению частоты экстремальных погодных явлений, что требует глобальных усилий по снижению выбросов парниковых газов."
+            },
+            {
+                id: 10,
+                title: "Перспективы мировой экономики",
+                definition: "Перспективы развития мировой экономики связаны с технологическими революциями, изменением геополитической картины мира, демографическими сдвигами и поиском новых моделей устойчивого развития.",
+                simple: "Куда движется мировая экономика: какие технологии изменят нашу жизнь, какие страны станут лидерами, как мы будем жить через 20-30 лет и сможем ли решить накопившиеся проблемы.",
+                keyPoints: [
+                    "Цифровая трансформация и искусственный интеллект",
+                    "Зеленая экономика и устойчивое развитие",
+                    "Сдвиг экономического центра тяжести в Азию",
+                    "Демографические изменения и старение населения"
+                ],
+                example: "К 2030 году Китай может обогнать США по размеру экономики, Индия станет самой населенной страной мира, а искусственный интеллект изменит рынок труда, автоматизировав многие профессии."
+            }
+        ];
+
+        let currentCardIndex = 0;
+        const totalCards = cardsData.length;
+        const cardElement = document.getElementById('card');
+        const testBtn = document.getElementById('testBtn');
+        const prevArrow = document.getElementById('prevArrow');
+        const nextArrow = document.getElementById('nextArrow');
+        const cardIndicators = document.getElementById('cardIndicators');
+        
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const SWIPE_THRESHOLD = 50;
+        let isAnimating = false;
+
+        const feedbackModal = document.getElementById('feedbackModal');
+        const modalClose = document.getElementById('modalClose');
+        const emailBtn = document.getElementById('emailBtn');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const messageTopic = document.getElementById('messageTopic');
+        const messageText = document.getElementById('messageText');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const statusMessage = document.getElementById('statusMessage');
+        const charCount = document.getElementById('charCount');
+        const emailLink = document.getElementById('emailLink');
+        const supportLink = document.getElementById('supportLink');
+        const feedbackLink = document.getElementById('feedbackLink');
+
+        function createIndicators() {
+            cardIndicators.innerHTML = '';
+            for (let i = 0; i < totalCards; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'card-indicator';
+                if (i === currentCardIndex) {
+                    indicator.classList.add('active');
+                }
+                if (i < currentCardIndex) {
+                    indicator.classList.add('visited');
+                }
+                indicator.setAttribute('data-index', i);
+                indicator.title = `Карточка ${i + 1}`;
+                indicator.addEventListener('click', () => goToCard(i));
+                cardIndicators.appendChild(indicator);
+            }
+        }
+
+        function goToCard(index) {
+            if (index === currentCardIndex || isAnimating) return;
+            
+            const direction = index > currentCardIndex ? 'next' : 'prev';
+            currentCardIndex = index;
+            updateCard(direction);
+        }
+
+        function updateCard(animationDirection = null) {
+            if (isAnimating) return;
+            
+            const card = cardsData[currentCardIndex];
+            
+            isAnimating = true;
+            
+            if (animationDirection === 'next') {
+                cardElement.classList.add('slide-out-left');
+                setTimeout(() => {
+                    updateCardContent(card);
+                    cardElement.classList.remove('slide-out-left');
+                    cardElement.classList.add('slide-in-right');
+                    setTimeout(() => {
+                        cardElement.classList.remove('slide-in-right');
+                        isAnimating = false;
+                    }, 400);
+                }, 200);
+            } else if (animationDirection === 'prev') {
+                cardElement.classList.add('slide-out-right');
+                setTimeout(() => {
+                    updateCardContent(card);
+                    cardElement.classList.remove('slide-out-right');
+                    cardElement.classList.add('slide-in-left');
+                    setTimeout(() => {
+                        cardElement.classList.remove('slide-in-left');
+                        isAnimating = false;
+                    }, 400);
+                }, 200);
+            } else {
+                updateCardContent(card);
+                isAnimating = false;
+            }
+            
+            updateIndicators();
+            updateProgressStatus();
+            checkTestAvailability();
+        }
+
+        function updateCardContent(card) {
+            document.getElementById('cardTitle').textContent = card.title;
+            document.getElementById('cardNumFront').textContent = `#${card.id}`;
+            document.getElementById('cardNumBack').textContent = `#${card.id}`;
+            
+            document.getElementById('definitionText').textContent = card.definition;
+            document.getElementById('simpleText').textContent = card.simple;
+            document.getElementById('exampleText').textContent = card.example;
+            
+            const keyPointsList = document.getElementById('keyPoints');
+            keyPointsList.innerHTML = '';
+            card.keyPoints.forEach(point => {
+                const li = document.createElement('li');
+                li.textContent = point;
+                keyPointsList.appendChild(li);
+            });
+            
+            document.getElementById('progressText').textContent = 
+                `Карточка ${currentCardIndex + 1} из ${totalCards}`;
+            
+            const progressPercentage = ((currentCardIndex + 1) / totalCards) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+            
+            cardElement.classList.remove('flipped');
+            cardElement.classList.add('smooth-flip');
+            
+            const cardBack = document.querySelector('.card-back');
+            if (cardBack) {
+                cardBack.scrollTop = 0;
+            }
+            
+            prevArrow.disabled = currentCardIndex === 0;
+            nextArrow.disabled = currentCardIndex === totalCards - 1;
+        }
+
+        function updateIndicators() {
+            const indicators = document.querySelectorAll('.card-indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.remove('active', 'visited');
+                if (index === currentCardIndex) {
+                    indicator.classList.add('active');
+                } else if (index < currentCardIndex) {
+                    indicator.classList.add('visited');
+                }
+            });
+        }
+
+        function updateProgressStatus() {
+            const studiedCards = Math.max(currentCardIndex + 1, parseInt(localStorage.getItem('topic5_studied_cards') || '0'));
+            localStorage.setItem('topic5_studied_cards', studiedCards);
+            
+            const studiedPercentage = Math.round((studiedCards / totalCards) * 100);
+            localStorage.setItem('topic5_progress', studiedPercentage);
+            
+            document.getElementById('progressStatus').textContent = 
+                `Изучено: ${studiedCards}/${totalCards} карточек (${studiedPercentage}%)`;
+        }
+
+        function checkTestAvailability() {
+            const studiedCards = parseInt(localStorage.getItem('topic5_studied_cards') || '0');
+            const canTakeTest = studiedCards >= 8;
+            
+            testBtn.disabled = !canTakeTest;
+            
+            if (canTakeTest) {
+                testBtn.classList.add('pulse');
+                testBtn.title = "Можно пройти тест!";
+            } else {
+                testBtn.classList.remove('pulse');
+                testBtn.title = `Изучите еще ${8 - studiedCards} карточек для доступа к тесту`;
+            }
+        }
+
+        function flipCard() {
+            if (isAnimating) return;
+            
+            cardElement.classList.toggle('flipped');
+            
+            setTimeout(() => {
+                cardElement.classList.remove('smooth-flip');
+            }, 600);
+        }
+
+        prevArrow.addEventListener('click', () => {
+            if (currentCardIndex > 0 && !isAnimating) {
+                currentCardIndex--;
+                updateCard('prev');
+            }
+        });
+
+        nextArrow.addEventListener('click', () => {
+            if (currentCardIndex < totalCards - 1 && !isAnimating) {
+                currentCardIndex++;
+                updateCard('next');
+            }
+        });
+
+        cardElement.addEventListener('click', flipCard);
+
+        testBtn.addEventListener('click', () => {
+            window.location.href = 'test_topic5.html';
+        });
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.location.href = 'topics.html';
+        });
+
+        function handleSwipe() {
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (swipeDistance < -SWIPE_THRESHOLD && currentCardIndex < totalCards - 1) {
+                currentCardIndex++;
+                updateCard('next');
+            }
+            else if (swipeDistance > SWIPE_THRESHOLD && currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCard('prev');
+            }
+        }
+
+        cardElement.addEventListener('touchstart', (e) => {
+            if (isAnimating) return;
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        cardElement.addEventListener('touchend', (e) => {
+            if (isAnimating) return;
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        let mouseDownX = 0;
+        let mouseUpX = 0;
+        
+        cardElement.addEventListener('mousedown', (e) => {
+            if (isAnimating) return;
+            mouseDownX = e.clientX;
+        });
+
+        cardElement.addEventListener('mouseup', (e) => {
+            if (isAnimating) return;
+            mouseUpX = e.clientX;
+            const swipeDistance = mouseUpX - mouseDownX;
+            
+            if (Math.abs(swipeDistance) > SWIPE_THRESHOLD) {
+                if (swipeDistance < 0 && currentCardIndex < totalCards - 1) {
+                    currentCardIndex++;
+                    updateCard('next');
+                } else if (swipeDistance > 0 && currentCardIndex > 0) {
+                    currentCardIndex--;
+                    updateCard('prev');
+                }
+            }
+        });
+
+        function openModal() {
+            feedbackModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            userName.focus();
+        }
+
+        function closeModal() {
+            feedbackModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+
+        function resetForm() {
+            feedbackForm.reset();
+            charCount.textContent = '0';
+            charCount.style.color = '#7f8c8d';
+            statusMessage.style.display = 'none';
+            submitBtn.disabled = false;
+            submitText.textContent = '📨 Отправить сообщение';
+            loadingSpinner.style.display = 'none';
+        }
+
+        messageText.addEventListener('input', () => {
+            const length = messageText.value.length;
+            charCount.textContent = length;
+            
+            if (length > 1000) {
+                messageText.value = messageText.value.substring(0, 1000);
+                charCount.textContent = 1000;
+                charCount.style.color = '#e74c3c';
+            } else if (length > 900) {
+                charCount.style.color = '#f39c12';
+            } else {
+                charCount.style.color = '#7f8c8d';
+            }
+        });
+
+        function showStatus(message, isSuccess) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${isSuccess ? 'status-success' : 'status-error'}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function simulateEmailSending(formData) {
+            return new Promise((resolve) => {
+                const steps = [
+                    "Подготовка письма...",
+                    "Проверка данных...",
+                    "Отправка на сервер...",
+                    "Имитация доставки..."
+                ];
+                
+                let currentStep = 0;
+                
+                const interval = setInterval(() => {
+                    if (currentStep < steps.length) {
+                        submitText.textContent = steps[currentStep];
+                        currentStep++;
+                    } else {
+                        clearInterval(interval);
+                        
+                        setTimeout(() => {
+                            resolve({
+                                success: true,
+                                message: "✅ Сообщение успешно отправлено! Мы ответим вам в течение 24 часов."
+                            });
+                        }, 1000);
+                    }
+                }, 600);
+            });
+        }
+
+        async function submitFeedbackForm(event) {
+            event.preventDefault();
+            
+            if (!userName.value.trim() || !userEmail.value.trim() || !messageTopic.value || !messageText.value.trim()) {
+                showStatus('Пожалуйста, заполните все обязательные поля', false);
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail.value)) {
+                showStatus('Пожалуйста, введите корректный email', false);
+                return;
+            }
+            
+            const formData = {
+                name: userName.value.trim(),
+                email: userEmail.value.trim(),
+                topic: getTopicText(messageTopic.value),
+                message: messageText.value.trim(),
+                date: new Date().toLocaleString('ru-RU'),
+                ip: '127.0.0.1',
+                userAgent: navigator.userAgent
+            };
+            
+            submitBtn.disabled = true;
+            submitText.textContent = 'Начинаем отправку...';
+            loadingSpinner.style.display = 'block';
+            statusMessage.style.display = 'none';
+            
+            try {
+                const result = await simulateEmailSending(formData);
+                
+                if (result.success) {
+                    showStatus(result.message, true);
+                    
+                    console.log('=== СООБЩЕНИЕ ОТПРАВЛЕНО ===');
+                    console.log('От:', formData.name);
+                    console.log('Email:', formData.email);
+                    console.log('Тема:', formData.topic);
+                    console.log('Дата:', formData.date);
+                    console.log('Сообщение:', formData.message);
+                    console.log('IP:', formData.ip);
+                    console.log('Браузер:', formData.userAgent);
+                    console.log('============================');
+                    
+                    setTimeout(() => {
+                        resetForm();
+                        setTimeout(() => {
+                            closeModal();
+                        }, 1000);
+                    }, 2000);
+                } else {
+                    throw new Error(result.message);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                showStatus('❌ Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.', false);
+                
+                submitBtn.disabled = false;
+                submitText.textContent = '📨 Отправить сообщение';
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function getTopicText(topicValue) {
+            const topics = {
+                'question': 'Вопрос по материалу',
+                'bug': 'Сообщить об ошибке',
+                'suggestion': 'Предложение по улучшению',
+                'other': 'Другое'
+            };
+            return topics[topicValue] || 'Другое';
+        }
+
+        emailBtn.addEventListener('click', openModal);
+        
+        emailLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+        
+        supportLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+        
+        feedbackLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        
+        feedbackModal.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) {
+                closeModal();
+            }
+        });
+
+        feedbackForm.addEventListener('submit', submitFeedbackForm);
+
+        document.addEventListener('keydown', (e) => {
+            if (isAnimating) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (currentCardIndex > 0) {
+                        currentCardIndex--;
+                        updateCard('prev');
+                        e.preventDefault();
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (currentCardIndex < totalCards - 1) {
+                        currentCardIndex++;
+                        updateCard('next');
+                        e.preventDefault();
+                    }
+                    break;
+                case ' ':
+                case 'Spacebar':
+                    flipCard();
+                    e.preventDefault();
+                    break;
+                case 'Enter':
+                    if (!testBtn.disabled) {
+                        testBtn.click();
+                    }
+                    break;
+                case 'Escape':
+                    if (feedbackModal.style.display === 'flex') {
+                        closeModal();
+                    } else {
+                        window.location.href = 'topics.html';
+                    }
+                    break;
+            }
+        });
+
+        createIndicators();
+        updateCard();
+        
+        function updateArrowPositions() {
+            const isMobile = window.innerWidth <= 900;
+            if (isMobile) {
+                prevArrow.style.left = '10px';
+                nextArrow.style.right = '10px';
+                prevArrow.style.background = 'rgba(255, 255, 255, 0.8)';
+                nextArrow.style.background = 'rgba(255, 255, 255, 0.8)';
+            } else {
+                prevArrow.style.left = '-70px';
+                nextArrow.style.right = '-70px';
+                prevArrow.style.background = 'rgba(255, 255, 255, 0.9)';
+                nextArrow.style.background = 'rgba(255, 255, 255, 0.9)';
+            }
+        }
+        
+        window.addEventListener('resize', updateArrowPositions);
+        updateArrowPositions();
+        
+        window.addEventListener('load', () => {
+            const savedProgress = localStorage.getItem('topic5_studied_cards');
+            checkTestAvailability();
+        });
+    </script>
+</body>
+</html>

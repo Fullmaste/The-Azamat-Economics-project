@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор темы - Экономика с нуля</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* ШАПКА */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* СЕТКА ТЕМ - 3 В РЯД */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-card:hover:not(.locked):not(.coming-soon) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            border-color: #3498db;
+        }
+        
+        .topic-card.locked {
+            opacity: 0.7;
+            cursor: not-allowed;
+            filter: grayscale(0.3);
+        }
+        
+        .topic-card.coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* ЗАМОК ДЛЯ ЗАБЛОКИРОВАННЫХ ТЕМ */
+        .lock-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #e74c3c;
+        }
+        
+        .unlock-requirement {
+            font-size: 0.8rem;
+            color: #e74c3c;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .topic-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .topic-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.3;
+        }
+        
+        .topic-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        
+        .topic-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .topic-badge {
+            background: #2ecc71;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .locked-badge {
+            background: #e74c3c;
+        }
+        
+        .coming-soon-badge {
+            background: #95a5a6;
+        }
+        
+        /* СТАТУС ТЕМЫ */
+        .topic-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .status-completed {
+            color: #2ecc71;
+        }
+        
+        .status-available {
+            color: #3498db;
+        }
+        
+        .status-locked {
+            color: #e74c3c;
+        }
+        
+        /* ПРОГРЕСС ОБЩИЙ */
+        .overall-progress {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .progress-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .progress-item {
+            margin-bottom: 15px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar-container {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #3498db);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        /* АЧИВКИ */
+        .achievements {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .achievement-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .achievement {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            position: relative;
+        }
+        
+        .achievement.unlocked {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+        
+        .achievement.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+        
+        /* ФУТЕР */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #95a5a6;
+            padding: 20px;
+        }
+        
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 1024px) {
+            .topics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" id="backBtn">
+            ← На главную
+        </button>
+        
+        <div class="header">
+            <h1>🎯 Выбор темы для изучения</h1>
+            <p>Темы открываются последовательно. Пройдите тест в конце каждой темы, чтобы разблокировать следующую!</p>
+        </div>
+        
+        <div class="topics-grid">
+            <!-- ТЕМА 1 (всегда доступна) -->
+            <div class="topic-card" data-topic="1" id="topic1">
+                <div class="topic-icon">📊</div>
+                <h3>
+                    <span>Основы экономики</span>
+                    <span class="topic-badge">10 карточек</span>
+                </h3>
+                <p>Базовые понятия экономики: спрос и предложение, рынок, деньги, инфляция, банки. Идеально для начала.</p>
+                
+                <div class="topic-status status-available">
+                    <span>✅ Доступна для изучения</span>
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★☆☆☆☆</span>
+                    <span>Время: 30 мин</span>
+                </div>
+            </div>
+            
+            <!-- ТЕМА 2 (заблокирована изначально) -->
+            <div class="topic-card locked" data-topic="2" id="topic2">
+                <div class="lock-icon">🔒</div>
+                <div class="topic-icon">💰</div>
+                <h3>
+                    <span>Личные финансы</span>
+                    <span class="topic-badge locked-badge">Заблокировано</span>
+                </h3>
+                <p>Управление деньгами: бюджет, сбережения, кредиты, инвестиции, налоги. Как грамотно распоряжаться финансами.</p>
+                
+                <div class="topic-status status-locked">
+                    <span>🔒 Пройдите тест по теме 1</span>
+                </div>
+                
+                <div class="unlock-requirement">
+                    Требуется: завершить тему 1
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★★☆☆☆</span>
+                    <span>Время: 40 мин</span>
+                </div>
+            </div>
+            
+            <!-- ТЕМА 3 (заблокирована) -->
+            <div class="topic-card locked" data-topic="3" id="topic3">
+                <div class="lock-icon">🔒</div>
+                <div class="topic-icon">🏛️</div>
+                <h3>
+                    <span>Макроэкономика</span>
+                    <span class="topic-badge locked-badge">Заблокировано</span>
+                </h3>
+                <p>Экономика стран: ВВП, безработица, госбюджет, международная торговля. Как работают экономики государств.</p>
+                
+                <div class="topic-status status-locked">
+                    <span>🔒 Пройдите тест по теме 2</span>
+                </div>
+                
+                <div class="unlock-requirement">
+                    Требуется: завершить тему 2
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★★★☆☆</span>
+                    <span>Время: 50 мин</span>
+                </div>
+            </div>
+            
+            <!-- ТЕМА 4 (заблокирована) -->
+            <div class="topic-card locked" data-topic="4" id="topic4">
+                <div class="lock-icon">🔒</div>
+                <div class="topic-icon">📈</div>
+                <h3>
+                    <span>Инвестиции</span>
+                    <span class="topic-badge locked-badge">Заблокировано</span>
+                </h3>
+                <p>Фондовый рынок, акции, облигации, ETF, криптовалюты. Как заставить деньги работать на вас.</p>
+                
+                <div class="topic-status status-locked">
+                    <span>🔒 Пройдите тест по теме 3</span>
+                </div>
+                
+                <div class="unlock-requirement">
+                    Требуется: завершить тему 3
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★★★☆☆</span>
+                    <span>Время: 60 мин</span>
+                </div>
+            </div>
+            
+            <!-- ТЕМА 5 (заблокирована) -->
+            <div class="topic-card locked" data-topic="5" id="topic5">
+                <div class="lock-icon">🔒</div>
+                <div class="topic-icon">🌍</div>
+                <h3>
+                    <span>Мировая экономика</span>
+                    <span class="topic-badge locked-badge">Заблокировано</span>
+                </h3>
+                <p>Глобализация, валютные курсы, международные организации, экономические кризисы.</p>
+                
+                <div class="topic-status status-locked">
+                    <span>🔒 Пройдите тест по теме 4</span>
+                </div>
+                
+                <div class="unlock-requirement">
+                    Требуется: завершить тему 4
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★★★★☆</span>
+                    <span>Время: 70 мин</span>
+                </div>
+            </div>
+            
+            <!-- ТЕМА 6 (заблокирована) -->
+            <div class="topic-card locked" data-topic="6" id="topic6">
+                <div class="lock-icon">🔒</div>
+                <div class="topic-icon">🏢</div>
+                <h3>
+                    <span>Бизнес и предпринимательство</span>
+                    <span class="topic-badge locked-badge">Заблокировано</span>
+                </h3>
+                <p>Создание бизнеса, маркетинг, управление, финансы компании, стартапы.</p>
+                
+                <div class="topic-status status-locked">
+                    <span>🔒 Пройдите тест по теме 5</span>
+                </div>
+                
+                <div class="unlock-requirement">
+                    Требуется: завершить тему 5
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★★★★☆</span>
+                    <span>Время: 80 мин</span>
+                </div>
+            </div>
+            
+            <!-- ТЕМА 7 (заблокирована) -->
+            <div class="topic-card locked" data-topic="7" id="topic7">
+                <div class="lock-icon">🔒</div>
+                <div class="topic-icon">💼</div>
+                <h3>
+                    <span>Карьера и заработок</span>
+                    <span class="topic-badge locked-badge">Заблокировано</span>
+                </h3>
+                <p>Профессии в экономике, переговоры о зарплате, фриланс, повышение квалификации.</p>
+                
+                <div class="topic-status status-locked">
+                    <span>🔒 Пройдите тест по теме 6</span>
+                </div>
+                
+                <div class="unlock-requirement">
+                    Требуется: завершить тему 6
+                </div>
+                
+                <div class="topic-stats">
+                    <span>Сложность: ★★☆☆☆</span>
+                    <span>Время: 45 мин</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="overall-progress">
+            <h3 class="progress-title">Ваш общий прогресс</h3>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Основы экономики</span>
+                    <span id="progress1">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar1"></div>
+                </div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Личные финансы</span>
+                    <span id="progress2">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar2"></div>
+                </div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Всего пройдено</span>
+                    <span id="totalProgress">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="totalProgressBar"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="achievements">
+            <h3 class="progress-title">🎖️ Ваши достижения</h3>
+            <div class="achievement-grid">
+                <div class="achievement locked" id="ach1" title="Новичок: начните первую тему">
+                    🎯
+                </div>
+                <div class="achievement locked" id="ach2" title="Основатель: завершите тему 1">
+                    📊
+                </div>
+                <div class="achievement locked" id="ach3" title="Финансист: завершите тему 2">
+                    💰
+                </div>
+                <div class="achievement locked" id="ach4" title="Аналитик: завершите тему 3">
+                    📈
+                </div>
+                <div class="achievement locked" id="ach5" title="Инвестор: завершите тему 4">
+                    🏦
+                </div>
+                <div class="achievement locked" id="ach6" title="Эксперт: завершите 5 тем">
+                    👨‍🎓
+                </div>
+                <div class="achievement locked" id="ach7" title="Мастер: завершите все темы">
+                    🏆
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 Экономика с нуля. 7 тем, 70 карточек, система прогрессивного обучения.</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Для разблокировки следующей темы необходимо успешно пройти тест предыдущей.</p>
+        </div>
+    </div>
+
+<script>
+    // СИСТЕМА РАЗБЛОКИРОВКИ ТЕМ
+    const unlockRequirements = {
+        1: null, // Первая тема всегда открыта
+        2: 'topic1_passed', // Тема 2 открывается после темы 1
+        3: 'topic2_passed', // Тема 3 после темы 2
+        4: 'topic3_passed', // И так далее...
+        5: 'topic4_passed',
+        6: 'topic5_passed',
+        7: 'topic6_passed'
+    };
+
+    // СООТВЕТСТВИЕ ТЕМ И ФАЙЛОВ
+    const topicPages = {
+        1: 'study_topic1.html',
+        2: 'study_topic2.html',
+        3: 'study_topic3.html',
+        4: 'study_topic4.html',
+        5: 'study_topic5.html',
+        6: 'study_topic6.html',
+        7: 'study_topic7.html'
+    };
+
+    // ФУНКЦИЯ ПРОВЕРКИ РАЗБЛОКИРОВКИ ТЕМ
+    function checkUnlockedTopics() {
+        for (let topicId = 1; topicId <= 7; topicId++) {
+            const card = document.getElementById(`topic${topicId}`);
+            if (!card) continue;
+            
+            const requirement = unlockRequirements[topicId];
+            
+            if (requirement === null) {
+                // Первая тема всегда открыта
+                unlockTopicCard(card, topicId);
+                continue;
+            }
+            
+            // Проверяем, пройден ли предыдущий тест
+            const isUnlocked = localStorage.getItem(requirement) === 'true';
+            
+            if (isUnlocked) {
+                // Разблокируем тему
+                unlockTopicCard(card, topicId);
+            } else {
+                // Блокируем тему
+                lockTopicCard(card, topicId);
+            }
+        }
+    }
+
+    // ФУНКЦИЯ РАЗБЛОКИРОВКИ КАРТОЧКИ ТЕМЫ
+    function unlockTopicCard(card, topicId) {
+        card.classList.remove('locked');
+        card.classList.remove('coming-soon');
+        
+        // Убираем иконку замка
+        const lockIcon = card.querySelector('.lock-icon');
+        if (lockIcon) lockIcon.remove();
+        
+        // Обновляем статус
+        const statusDiv = card.querySelector('.topic-status');
+        if (statusDiv) {
+            statusDiv.innerHTML = '<span>✅ Доступна для изучения</span>';
+            statusDiv.className = 'topic-status status-available';
+        }
+        
+        // Обновляем бейдж
+        const badge = card.querySelector('.topic-badge');
+        if (badge && badge.classList.contains('locked-badge')) {
+            badge.textContent = '10 карточек';
+            badge.className = 'topic-badge';
+        }
+        
+        // Убираем требование
+        const reqDiv = card.querySelector('.unlock-requirement');
+        if (reqDiv) reqDiv.remove();
+        
+        // Добавляем обработчик клика
+        card.addEventListener('click', () => handleTopicClick(topicId));
+    }
+
+    // ФУНКЦИЯ БЛОКИРОВКИ КАРТОЧКИ ТЕМЫ
+    function lockTopicCard(card, topicId) {
+        card.classList.add('locked');
+        card.classList.remove('unlocked');
+        
+        // Добавляем иконку замка если ее нет
+        if (!card.querySelector('.lock-icon')) {
+            const lockIcon = document.createElement('div');
+            lockIcon.className = 'lock-icon';
+            lockIcon.innerHTML = '🔒';
+            card.insertBefore(lockIcon, card.firstChild);
+        }
+        
+        // Обновляем статус
+        const statusDiv = card.querySelector('.topic-status');
+        if (statusDiv) {
+            const prevTopic = topicId - 1;
+            statusDiv.innerHTML = `<span>🔒 Пройдите тест по теме ${prevTopic}</span>`;
+            statusDiv.className = 'topic-status status-locked';
+        }
+        
+        // Обновляем бейдж
+        const badge = card.querySelector('.topic-badge');
+        if (badge && !badge.classList.contains('locked-badge')) {
+            badge.textContent = 'Заблокировано';
+            badge.className = 'topic-badge locked-badge';
+        }
+        
+        // Добавляем требование
+        let reqDiv = card.querySelector('.unlock-requirement');
+        if (!reqDiv) {
+            reqDiv = document.createElement('div');
+            reqDiv.className = 'unlock-requirement';
+            const topicContent = card.querySelector('.topic-stats');
+            if (topicContent) {
+                card.insertBefore(reqDiv, topicContent);
+            }
+        }
+        reqDiv.textContent = `Требуется: завершить тему ${topicId - 1}`;
+        
+        // Удаляем обработчик клика
+        card.removeEventListener('click', () => handleTopicClick(topicId));
+    }
+
+    // ОБРАБОТКА КЛИКОВ ПО КАРТОЧКАМ ТЕМ
+    function handleTopicClick(topicId) {
+        // Проверяем, не заблокирована ли тема
+        const card = document.getElementById(`topic${topicId}`);
+        if (!card || card.classList.contains('locked') || card.classList.contains('coming-soon')) {
+            return;
+        }
+        
+        // Проверяем, разблокирована ли тема
+        const requirement = unlockRequirements[topicId];
+        if (requirement && requirement !== null) {
+            const isUnlocked = localStorage.getItem(requirement) === 'true';
+            if (!isUnlocked) {
+                alert(`Сначала пройдите тему ${topicId - 1}!`);
+                return;
+            }
+        }
+        
+        // Переход на страницу изучения темы
+        const page = topicPages[topicId];
+        if (page) {
+            // Проверяем существует ли страница
+            fetch(page)
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = page;
+                    } else {
+                        // Если страница не существует, показываем сообщение
+                        showComingSoonMessage(topicId);
+                    }
+                })
+                .catch(() => {
+                    // В случае ошибки сети тоже показываем сообщение
+                    showComingSoonMessage(topicId);
+                });
+        } else {
+            showComingSoonMessage(topicId);
+        }
+    }
+    
+    // ФУНКЦИЯ ПОКАЗА СООБЩЕНИЯ "СКОРО"
+    function showComingSoonMessage(topicId) {
+        const topicNames = {
+            1: 'Основы экономики',
+            2: 'Личные финансы',
+            3: 'Макроэкономика',
+            4: 'Инвестиции',
+            5: 'Мировая экономика',
+            6: 'Бизнес и предпринимательство',
+            7: 'Карьера и заработок'
+        };
+        
+        const topicName = topicNames[topicId] || `Тема ${topicId}`;
+        alert(`Тема "${topicName}" в разработке. Скоро будет доступна!`);
+    }
+    
+    // КНОПКА НАЗАД
+    document.getElementById('backBtn').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+    
+    // ЗАГРУЗКА ПРОГРЕССА ИЗ LOCALSTORAGE
+    function loadProgress() {
+        // Прогресс по всем темам
+        let totalProgressSum = 0;
+        let topicCount = 0;
+        let completedTopics = 0;
+        
+        const topicNames = {
+            1: 'Основы экономики',
+            2: 'Личные финансы',
+            3: 'Макроэкономика',
+            4: 'Инвестиции',
+            5: 'Мировая экономика',
+            6: 'Бизнес и предпринимательство',
+            7: 'Карьера и заработок'
+        };
+        
+        for (let topicId = 1; topicId <= 7; topicId++) {
+            // Проверяем, есть ли прогрессбар для этой темы
+            const progressElement = document.getElementById(`progress${topicId}`);
+            const progressBar = document.getElementById(`progressBar${topicId}`);
+            
+            // Если элементов нет, создаем их для тем 3-7
+            if (!progressElement && topicId >= 3) {
+                createProgressElement(topicId, topicNames[topicId]);
+            }
+            
+            // Теперь снова пытаемся найти элементы
+            const currentProgressElement = document.getElementById(`progress${topicId}`);
+            const currentProgressBar = document.getElementById(`progressBar${topicId}`);
+            
+            if (currentProgressElement && currentProgressBar) {
+                // Получаем прогресс изучения карточек
+                const studiedProgress = localStorage.getItem(`topic${topicId}_progress`) || 0;
+                const studiedPercentage = parseInt(studiedProgress);
+                
+                // Проверяем, пройден ли тест
+                const testPassed = localStorage.getItem(`topic${topicId}_passed`) === 'true';
+                
+                // Если тест пройден, прогресс = 100%
+                // Если не пройден, но карточки изучались, показываем прогресс карточек
+                let progress = 0;
+                if (testPassed) {
+                    progress = 100;
+                    completedTopics++;
+                } else if (studiedPercentage > 0) {
+                    progress = studiedPercentage;
+                }
+                
+                currentProgressElement.textContent = `${progress}%`;
+                currentProgressBar.style.width = `${progress}%`;
+                
+                // Если тест пройден, добавляем иконку ✅
+                if (testPassed) {
+                    currentProgressElement.innerHTML = `✅ ${progress}%`;
+                }
+                
+                totalProgressSum += progress;
+                topicCount++;
+            }
+        }
+        
+        // Общий прогресс
+        if (topicCount > 0) {
+            const totalProgress = Math.round(totalProgressSum / topicCount);
+            const totalProgressElement = document.getElementById('totalProgress');
+            const totalProgressBar = document.getElementById('totalProgressBar');
+            
+            if (totalProgressElement && totalProgressBar) {
+                totalProgressElement.textContent = `${totalProgress}%`;
+                totalProgressBar.style.width = `${totalProgress}%`;
+                
+                // Обновляем текст общего прогресса
+                document.querySelector('#totalProgress').previousElementSibling.textContent = 
+                    `Всего пройдено (${completedTopics}/7 тем)`;
+            }
+        }
+        
+        // Обновляем ачивки
+        updateAchievements();
+    }
+    
+    // ФУНКЦИЯ СОЗДАНИЯ ЭЛЕМЕНТА ПРОГРЕССА
+    function createProgressElement(topicId, topicName) {
+        const progressContainer = document.querySelector('.overall-progress');
+        const totalProgressItem = document.querySelector('.progress-item:last-of-type');
+        
+        if (progressContainer && totalProgressItem) {
+            // Создаем новый элемент прогресса
+            const newProgressItem = document.createElement('div');
+            newProgressItem.className = 'progress-item';
+            newProgressItem.innerHTML = `
+                <div class="progress-label">
+                    <span>${topicName}</span>
+                    <span id="progress${topicId}">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar${topicId}"></div>
+                </div>
+            `;
+            
+            // Вставляем перед последним элементом (перед "Всего пройдено")
+            progressContainer.insertBefore(newProgressItem, totalProgressItem);
+        }
+    }
+    
+    // ФУНКЦИЯ ОБНОВЛЕНИЯ АЧИВОК
+    function updateAchievements() {
+        // Ачивка 1: Начало обучения (всегда есть при первом заходе)
+        if (localStorage.getItem('first_visit') === 'true') {
+            const ach1 = document.getElementById('ach1');
+            if (ach1) {
+                ach1.classList.remove('locked');
+                ach1.classList.add('unlocked');
+            }
+        }
+        
+        // Проверяем все ачивки
+        const achievements = [
+            { 
+                id: 'ach2', 
+                check: () => localStorage.getItem('topic1_passed') === 'true',
+                title: "Основатель: завершите тему 1"
+            },
+            { 
+                id: 'ach3', 
+                check: () => localStorage.getItem('topic2_passed') === 'true',
+                title: "Финансист: завершите тему 2"
+            },
+            { 
+                id: 'ach4', 
+                check: () => localStorage.getItem('topic3_passed') === 'true',
+                title: "Аналитик: завершите тему 3"
+            },
+            { 
+                id: 'ach5', 
+                check: () => localStorage.getItem('topic4_passed') === 'true',
+                title: "Инвестор: завершите тему 4"
+            },
+            { 
+                id: 'ach6', 
+                check: () => {
+                    let completed = 0;
+                    for (let i = 1; i <= 5; i++) {
+                        if (localStorage.getItem(`topic${i}_passed`) === 'true') {
+                            completed++;
+                        }
+                    }
+                    return completed >= 5;
+                },
+                title: "Эксперт: завершите 5 тем"
+            },
+            { 
+                id: 'ach7', 
+                check: () => {
+                    let allCompleted = true;
+                    for (let i = 1; i <= 7; i++) {
+                        if (localStorage.getItem(`topic${i}_passed`) !== 'true') {
+                            allCompleted = false;
+                            break;
+                        }
+                    }
+                    return allCompleted;
+                },
+                title: "Мастер: завершите все темы"
+            }
+        ];
+        
+        achievements.forEach(achievement => {
+            const element = document.getElementById(achievement.id);
+            if (element) {
+                if (achievement.check()) {
+                    element.classList.remove('locked');
+                    element.classList.add('unlocked');
+                    element.title = `${achievement.title} ✓`;
+                } else {
+                    element.classList.add('locked');
+                    element.classList.remove('unlocked');
+                    element.title = achievement.title;
+                }
+            }
+        });
+    }
+    
+    // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+    window.addEventListener('load', () => {
+        // Отмечаем первый визит
+        if (!localStorage.getItem('first_visit')) {
+            localStorage.setItem('first_visit', 'true');
+        }
+        
+        // Проверяем разблокированные темы
+        checkUnlockedTopics();
+        
+        // Загружаем прогресс
+        loadProgress();
+        
+        // Создаем прогрессбары для всех тем
+        const topicNames = {
+            1: 'Основы экономики',
+            2: 'Личные финансы',
+            3: 'Макроэкономика',
+            4: 'Инвестиции',
+            5: 'Мировая экономика',
+            6: 'Бизнес и предпринимательство',
+            7: 'Карьера и заработок'
+        };
+        
+        for (let topicId = 1; topicId <= 7; topicId++) {
+            const existingProgress = document.getElementById(`progress${topicId}`);
+            if (!existingProgress) {
+                createProgressElement(topicId, topicNames[topicId]);
+            }
+        }
+        
+        // Обновляем прогресс еще раз после создания всех элементов
+        setTimeout(loadProgress, 100);
+    });
+    
+    // ФУНКЦИЯ ПОЛУЧЕНИЯ ИМЕНИ ТЕМЫ
+    function getTopicName(topicId) {
+        const topicNames = {
+            1: 'Основы экономики',
+            2: 'Личные финансы',
+            3: 'Макроэкономика',
+            4: 'Инвестиции',
+            5: 'Мировая экономика',
+            6: 'Бизнес и предпринимательство',
+            7: 'Карьера и заработок'
+        };
+        return topicNames[topicId] || `Тема ${topicId}`;
+    }
+    
+    // АНИМАЦИЯ ПРИ НАВЕДЕНИИ (только для разблокированных тем)
+    function setupHoverEffects() {
+        document.querySelectorAll('.topic-card').forEach(card => {
+            // Только для не заблокированных тем
+            if (!card.classList.contains('locked') && !card.classList.contains('coming-soon')) {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 15px 35px rgba(0,0,0,0.12)';
+                    this.style.borderColor = '#3498db';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.08)';
+                    this.style.borderColor = 'transparent';
+                });
+            }
+        });
+    }
+    
+    // Вызываем настройку эффектов наведения после загрузки
+    setTimeout(setupHoverEffects, 100);
+    
+    // ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОГРЕССА В РЕАЛЬНОМ ВРЕМЕНИ
+    // (можно вызвать после прохождения теста)
+    function updateTopicProgress(topicId) {
+        const progressElement = document.getElementById(`progress${topicId}`);
+        const progressBar = document.getElementById(`progressBar${topicId}`);
+        
+        if (progressElement && progressBar) {
+            const testPassed = localStorage.getItem(`topic${topicId}_passed`) === 'true';
+            const studiedProgress = localStorage.getItem(`topic${topicId}_progress`) || 0;
+            
+            let progress = 0;
+            if (testPassed) {
+                progress = 100;
+                progressElement.innerHTML = `✅ ${progress}%`;
+            } else {
+                progress = parseInt(studiedProgress);
+                progressElement.textContent = `${progress}%`;
+            }
+            
+            progressBar.style.width = `${progress}%`;
+            
+            // Пересчитываем общий прогресс
+            recalculateTotalProgress();
+            updateAchievements();
+        }
+    }
+    
+    // ФУНКЦИЯ ПЕРЕСЧЕТА ОБЩЕГО ПРОГРЕССА
+    function recalculateTotalProgress() {
+        let totalProgressSum = 0;
+        let topicCount = 0;
+        let completedTopics = 0;
+        
+        for (let topicId = 1; topicId <= 7; topicId++) {
+            const progressElement = document.getElementById(`progress${topicId}`);
+            if (progressElement) {
+                const progressText = progressElement.textContent;
+                const progress = parseInt(progressText.replace('✅', '').replace('%', '').trim()) || 0;
+                
+                totalProgressSum += progress;
+                topicCount++;
+                
+                if (progress === 100) {
+                    completedTopics++;
+                }
+            }
+        }
+        
+        if (topicCount > 0) {
+            const totalProgress = Math.round(totalProgressSum / topicCount);
+            const totalProgressElement = document.getElementById('totalProgress');
+            const totalProgressBar = document.getElementById('totalProgressBar');
+            
+            if (totalProgressElement && totalProgressBar) {
+                totalProgressElement.textContent = `${totalProgress}%`;
+                totalProgressBar.style.width = `${totalProgress}%`;
+                
+                // Обновляем текст
+                document.querySelector('#totalProgress').previousElementSibling.textContent = 
+                    `Всего пройдено (${completedTopics}/7 тем)`;
+            }
+        }
+    }
+    
+    // Добавляем слушатель для обновления прогресса при возврате на страницу
+    window.addEventListener('focus', () => {
+        loadProgress();
+    });
+</script>
+</body>
+</html>

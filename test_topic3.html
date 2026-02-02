@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Макроэкономика - Экономика с нуля</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* ШАПКА */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* ИНФО ПАНЕЛЬ */
+        .info-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .test-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        /* ВОПРОС */
+        .question-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .question-number {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        /* ВАРИАНТЫ ОТВЕТОВ */
+        .answers-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .answer-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .answer-option:hover:not(.answered):not(.selected) {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .answer-option.selected {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .answer-option.correct {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .answer-option.incorrect {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            animation: incorrectShake 0.5s ease;
+        }
+        
+        .answer-option.answered {
+            cursor: not-allowed;
+        }
+        
+        .answer-letter {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-option.selected .answer-letter {
+            background: #2980b9;
+        }
+        
+        .answer-option.correct .answer-letter {
+            background: #27ae60;
+        }
+        
+        .answer-option.incorrect .answer-letter {
+            background: #c0392b;
+        }
+        
+        /* УПРАВЛЕНИЕ */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .control-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .prev-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .next-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .restart-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .control-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* РЕЗУЛЬТАТ */
+        .result-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            display: none;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .result-score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #3498db;
+        }
+        
+        .result-passed {
+            color: #2ecc71;
+        }
+        
+        .result-failed {
+            color: #e74c3c;
+        }
+        
+        .result-message {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .review-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .next-topic-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .retry-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        /* ПРОГРЕСС-БАР */
+        .progress-container {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #3498db);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+            }
+            
+            .info-panel {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .test-info {
+                justify-content: space-around;
+            }
+        }
+        
+        /* АНИМАЦИИ */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes incorrectShake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .question-container {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .answer-option {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        /* ИНДИКАТОР ОТВЕТА */
+        .answer-indicator {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .correct-indicator {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #27ae60;
+        }
+        
+        .incorrect-indicator {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" id="backBtn">
+            ← К карточкам
+        </button>
+        
+        <div class="header">
+            <h1>📝 Тест: Макроэкономика</h1>
+            <p>Ответьте на 6 вопросов, чтобы разблокировать следующую тему. Минимум 4 правильных ответа для успешного прохождения.</p>
+        </div>
+        
+        <div class="info-panel">
+            <div class="test-info">
+                <div class="info-item">
+                    <div class="info-value" id="currentQuestion">1</div>
+                    <div class="info-label">Вопрос</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-value" id="correctCount">0</div>
+                    <div class="info-label">Правильно</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-value" id="timer">05:00</div>
+                    <div class="info-label">Осталось</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div id="progressText">Прогресс: 0%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- КОНТЕЙНЕР ВОПРОСА -->
+        <div class="question-container" id="questionContainer">
+            <div class="question-number">Вопрос <span id="questionNum">1</span> из 6</div>
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="answers-grid" id="answersGrid">
+                <!-- Варианты ответов будут добавляться через JS -->
+            </div>
+            
+            <!-- ИНДИКАТОР ОТВЕТА -->
+            <div class="answer-indicator" id="answerIndicator"></div>
+        </div>
+        
+        <!-- КНОПКИ УПРАВЛЕНИЯ -->
+        <div class="controls">
+            <button class="control-btn prev-btn" id="prevBtn">
+                ← Назад
+            </button>
+            
+            <button class="control-btn next-btn" id="nextBtn">
+                Далее →
+            </button>
+            
+            <button class="control-btn submit-btn" id="submitBtn" style="display: none;">
+                ✅ Завершить тест
+            </button>
+        </div>
+        
+        <!-- КОНТЕЙНЕР РЕЗУЛЬТАТА -->
+        <div class="result-container" id="resultContainer">
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-score" id="resultScore"></div>
+            <div class="result-message" id="resultMessage"></div>
+            
+            <div class="result-actions">
+                <button class="action-btn review-btn" id="reviewBtn">
+                    📚 Вернуться к карточкам
+                </button>
+                <button class="action-btn retry-btn" id="retryBtn">
+                    🔄 Пройти заново
+                </button>
+                <button class="action-btn next-topic-btn" id="nextTopicBtn" style="display: none;">
+                    🔓 Перейти к теме 4
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // БАЗА ВОПРОСОВ ДЛЯ ТЕМЫ 3 (Макроэкономика)
+        const questionsDatabase = [
+            {
+                question: "Что такое макроэкономика?",
+                answers: [
+                    "Изучение поведения отдельных фирм и потребителей",
+                    "Изучение экономики страны в целом",
+                    "Анализ международных финансовых рынков",
+                    "Изучение истории экономических учений"
+                ],
+                correct: 1,
+                explanation: "Макроэкономика изучает экономику как единое целое, анализируя агрегированные показатели: ВВП, инфляцию, безработицу, экономический рост."
+            },
+            {
+                question: "Что измеряет показатель ВВП?",
+                answers: [
+                    "Уровень благосостояния отдельного человека",
+                    "Рыночную стоимость всех конечных товаров и услуг, произведенных в стране за год",
+                    "Количество денег в обращении",
+                    "Уровень цен на потребительские товары"
+                ],
+                correct: 1,
+                explanation: "ВВП (валовой внутренний продукт) — это рыночная стоимость всех конечных товаров и услуг, произведенных на территории страны за определенный период времени."
+            },
+            {
+                question: "Что такое инфляция?",
+                answers: [
+                    "Снижение общего уровня цен",
+                    "Устойчивое повышение общего уровня цен",
+                    "Рост стоимости отдельных товаров",
+                    "Увеличение покупательной способности денег"
+                ],
+                correct: 1,
+                explanation: "Инфляция — процесс устойчивого повышения общего уровня цен на товары и услуги в экономике. При этом деньги обесцениваются."
+            },
+            {
+                question: "Как рассчитывается уровень безработицы?",
+                answers: [
+                    "Безработные / все население страны × 100%",
+                    "Безработные / трудоспособное население × 100%",
+                    "Безработные / рабочая сила × 100%",
+                    "Безработные / занятые × 100%"
+                ],
+                correct: 2,
+                explanation: "Уровень безработицы = (количество безработных / рабочая сила) × 100%. Рабочая сила = занятые + безработные."
+            },
+            {
+                question: "Что такое государственный бюджет?",
+                answers: [
+                    "Список всех государственных предприятий",
+                    "План доходов и расходов государства на год",
+                    "Совокупность всех налогов в стране",
+                    "Объем денежной массы в экономике"
+                ],
+                correct: 1,
+                explanation: "Государственный бюджет — это план доходов и расходов государства на определенный период (обычно год), утверждаемый парламентом."
+            },
+            {
+                question: "Что такое ключевая ставка Центрального банка?",
+                answers: [
+                    "Ставка по кредитам для населения",
+                    "Процент, под который ЦБ выдает кредиты коммерческим банкам",
+                    "Средняя ставка по депозитам в банках",
+                    "Ставка налога на доходы физических лиц"
+                ],
+                correct: 1,
+                explanation: "Ключевая ставка — это процентная ставка, под которую Центральный банк выдает кредиты коммерческим банкам. Это главный инструмент денежно-кредитной политики."
+            },
+            {
+                question: "Что такое экономический цикл?",
+                answers: [
+                    "Процесс производства товаров",
+                    "Периодические колебания экономической активности",
+                    "Цикл обновления технологий",
+                    "Процесс планирования экономики"
+                ],
+                correct: 1,
+                explanation: "Экономический цикл — это периодические колебания экономической активности, состоящие из фаз подъема, пика, спада и дна (депрессии)."
+            },
+            {
+                question: "Что такое торговый баланс?",
+                answers: [
+                    "Разница между доходами и расходами семьи",
+                    "Разница между экспортом и импортом страны",
+                    "Баланс между спросом и предложением",
+                    "Соотношение налогов и государственных расходов"
+                ],
+                correct: 1,
+                explanation: "Торговый баланс = экспорт - импорт. Положительный баланс (профицит) означает, что экспорт превышает импорт, отрицательный (дефицит) — наоборот."
+            },
+            {
+                question: "Что такое валютный курс?",
+                answers: [
+                    "Курс обучения в экономическом вузе",
+                    "Цена денежной единицы одной страны, выраженная в денежных единицах другой страны",
+                    "Скорость обращения денег в экономике",
+                    "Процентная ставка по валютным кредитам"
+                ],
+                correct: 1,
+                explanation: "Валютный курс — это цена денежной единицы одной страны, выраженная в денежных единицах другой страны (например, 75 рублей за 1 доллар)."
+            },
+            {
+                question: "Что такое дефляция?",
+                answers: [
+                    "Быстрый рост цен",
+                    "Устойчивое снижение общего уровня цен",
+                    "Стабильность цен в экономике",
+                    "Рост стоимости иностранной валюты"
+                ],
+                correct: 1,
+                explanation: "Дефляция — это устойчивое снижение общего уровня цен. Опаснее инфляции, так как приводит к снижению производства, росту безработицы и экономическому спаду."
+            }
+        ];
+
+        // ПЕРЕМЕННЫЕ
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questionsDatabase.length).fill(null);
+        let userAnswerStatus = Array(questionsDatabase.length).fill(null);
+        let correctAnswersCount = 0;
+        let testCompleted = false;
+        let questions = [];
+        let timeLeft = 300;
+        let timerInterval = null;
+        let currentQuestionAnswered = false;
+
+        // ЭЛЕМЕНТЫ DOM
+        const questionText = document.getElementById('questionText');
+        const answersGrid = document.getElementById('answersGrid');
+        const questionNum = document.getElementById('questionNum');
+        const currentQuestion = document.getElementById('currentQuestion');
+        const correctCount = document.getElementById('correctCount');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultScore = document.getElementById('resultScore');
+        const resultMessage = document.getElementById('resultMessage');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const timerDisplay = document.getElementById('timer');
+        const answerIndicator = document.getElementById('answerIndicator');
+
+        // ФУНКЦИЯ ПЕРЕМЕШИВАНИЯ МАССИВА
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ ТЕСТА
+        function initTest() {
+            // Берем 6 случайных вопросов из 10
+            const allQuestions = shuffleArray([...questionsDatabase]);
+            questions = allQuestions.slice(0, 6);
+            
+            // Перемешиваем ответы в каждом вопросе
+            questions.forEach((q, index) => {
+                const answers = shuffleArray([...q.answers]);
+                const correctIndex = answers.indexOf(q.answers[q.correct]);
+                questions[index] = {
+                    ...q,
+                    answers: answers,
+                    correct: correctIndex
+                };
+            });
+            
+            // Сбрасываем переменные
+            currentQuestionIndex = 0;
+            userAnswers = Array(questions.length).fill(null);
+            userAnswerStatus = Array(questions.length).fill(null);
+            correctAnswersCount = 0;
+            testCompleted = false;
+            currentQuestionAnswered = false;
+            
+            // Обновляем счетчик
+            correctCount.textContent = '0';
+            
+            // Запускаем таймер
+            startTimer();
+            
+            // Показываем первый вопрос
+            showQuestion();
+        }
+
+        // ФУНКЦИЯ ПОКАЗА ВОПРОСА
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // Обновляем текст вопроса
+            questionText.textContent = question.question;
+            questionNum.textContent = currentQuestionIndex + 1;
+            currentQuestion.textContent = currentQuestionIndex + 1;
+            
+            // Обновляем прогресс
+            updateProgress();
+            
+            // Скрываем индикатор ответа
+            answerIndicator.style.display = 'none';
+            answerIndicator.textContent = '';
+            answerIndicator.className = 'answer-indicator';
+            
+            // Сбрасываем флаг ответа для текущего вопроса
+            currentQuestionAnswered = userAnswers[currentQuestionIndex] !== null;
+            
+            // Очищаем контейнер ответов
+            answersGrid.innerHTML = '';
+            
+            // Добавляем варианты ответов
+            const letters = ['A', 'B', 'C', 'D'];
+            question.answers.forEach((answer, index) => {
+                const answerElement = document.createElement('button');
+                answerElement.className = 'answer-option';
+                
+                // Если уже отвечали на этот вопрос
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    answerElement.classList.add('answered');
+                    
+                    if (userAnswers[currentQuestionIndex] === index) {
+                        answerElement.classList.add('selected');
+                        
+                        // Показываем правильность ответа
+                        if (userAnswerStatus[currentQuestionIndex] === 'correct') {
+                            answerElement.classList.add('correct');
+                        } else if (userAnswerStatus[currentQuestionIndex] === 'incorrect') {
+                            answerElement.classList.add('incorrect');
+                        }
+                    }
+                    
+                    // Показываем правильный ответ
+                    if (index === question.correct && userAnswers[currentQuestionIndex] !== question.correct) {
+                        answerElement.classList.add('correct');
+                    }
+                }
+                
+                answerElement.innerHTML = `
+                    <div class="answer-letter">${letters[index]}</div>
+                    <div class="answer-text">${answer}</div>
+                `;
+                
+                // Если вопрос еще не отвечен, добавляем обработчик
+                if (!currentQuestionAnswered) {
+                    answerElement.addEventListener('click', () => selectAnswer(index));
+                }
+                
+                answersGrid.appendChild(answerElement);
+            });
+            
+            // Обновляем состояние кнопок
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = !currentQuestionAnswered;
+            
+            // Показываем/скрываем кнопку отправки
+            const isLastQuestion = currentQuestionIndex === questions.length - 1;
+            if (isLastQuestion && currentQuestionAnswered) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // ФУНКЦИЯ ВЫБОРА ОТВЕТА
+        function selectAnswer(answerIndex) {
+            if (currentQuestionAnswered) return;
+            
+            const question = questions[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = answerIndex;
+            
+            // Проверяем правильность ответа
+            const isCorrect = answerIndex === question.correct;
+            userAnswerStatus[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
+            
+            // Обновляем счетчик правильных ответов
+            if (isCorrect) {
+                correctAnswersCount++;
+                correctCount.textContent = correctAnswersCount;
+            }
+            
+            currentQuestionAnswered = true;
+            
+            // Показываем визуальную обратную связь
+            showAnswerFeedback(isCorrect, question.explanation);
+            
+            // Обновляем кнопки
+            nextBtn.disabled = false;
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+            }
+        }
+
+        // ФУНКЦИЯ ПОКАЗА ОБРАТНОЙ СВЯЗИ ПО ОТВЕТУ
+        function showAnswerFeedback(isCorrect, explanation) {
+            const answerOptions = document.querySelectorAll('.answer-option');
+            const question = questions[currentQuestionIndex];
+            
+            answerOptions.forEach((option, index) => {
+                option.classList.add('answered');
+                
+                // Убираем обработчики клика
+                const newOption = option.cloneNode(true);
+                option.parentNode.replaceChild(newOption, option);
+                
+                // Подсвечиваем выбранный ответ
+                if (index === userAnswers[currentQuestionIndex]) {
+                    newOption.classList.add('selected');
+                    if (isCorrect) {
+                        newOption.classList.add('correct');
+                    } else {
+                        newOption.classList.add('incorrect');
+                    }
+                }
+                
+                // Подсвечиваем правильный ответ
+                if (index === question.correct && !isCorrect) {
+                    newOption.classList.add('correct');
+                }
+            });
+            
+            // Показываем индикатор с объяснением
+            answerIndicator.textContent = explanation;
+            answerIndicator.className = `answer-indicator ${isCorrect ? 'correct-indicator' : 'incorrect-indicator'}`;
+            answerIndicator.style.display = 'block';
+            answerIndicator.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОГРЕССА
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `Прогресс: ${Math.round(progress)}%`;
+        }
+
+        // ФУНКЦИЯ ТАЙМЕРА
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 300;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        // ФУНКЦИЯ ЗАВЕРШЕНИЯ ТЕСТА
+        function finishTest() {
+            clearInterval(timerInterval);
+            testCompleted = true;
+            
+            // Считаем итоговый результат
+            const score = Math.round((correctAnswersCount / questions.length) * 100);
+            const passed = correctAnswersCount >= 4;
+            
+            // Показываем результат
+            resultTitle.textContent = passed ? '🎉 Поздравляем!' : '😔 Попробуйте еще раз';
+            resultScore.textContent = `${score}%`;
+            resultScore.className = `result-score ${passed ? 'result-passed' : 'result-failed'}`;
+            
+            if (passed) {
+                resultMessage.textContent = `Вы правильно ответили на ${correctAnswersCount} из ${questions.length} вопросов. Тема успешно пройдена! Следующая тема разблокирована.`;
+                document.getElementById('nextTopicBtn').style.display = 'flex';
+                
+                // Сохраняем результат
+                localStorage.setItem('topic3_passed', 'true');
+                localStorage.setItem('topic3_test_score', score);
+                
+                // Показываем анимацию успеха
+                confettiAnimation();
+            } else {
+                resultMessage.textContent = `Вы правильно ответили на ${correctAnswersCount} из ${questions.length} вопросов. Для прохождения нужно минимум 4 правильных ответа. Вы можете вернуться к карточкам или попробовать еще раз.`;
+            }
+            
+            // Показываем контейнер результата
+            resultContainer.style.display = 'block';
+            questionContainer.style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.info-panel').style.display = 'none';
+        }
+
+        // ФУНКЦИЯ КОНФЕТТИ
+        function confettiAnimation() {
+            const confettiCount = 100;
+            const colors = ['#3498db', '#2ecc71', '#9b59b6', '#e74c3c', '#f1c40f'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.opacity = '0.8';
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                
+                document.body.appendChild(confetti);
+                
+                // Анимация падения
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight + 20}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 2000 + Math.random() * 3000,
+                    easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        // ОБРАБОТЧИКИ СОБЫТИЙ
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        });
+
+        submitBtn.addEventListener('click', finishTest);
+
+        // КНОПКА НАЗАД
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (confirm('Вы уверены? Весь прогресс в тесте будет потерян.')) {
+                window.location.href = 'study_topic3.html';
+            }
+        });
+
+        // КНОПКИ РЕЗУЛЬТАТА
+        document.getElementById('reviewBtn').addEventListener('click', () => {
+            window.location.href = 'study_topic3.html';
+        });
+
+        document.getElementById('retryBtn').addEventListener('click', () => {
+            initTest();
+            resultContainer.style.display = 'none';
+            questionContainer.style.display = 'block';
+            document.querySelector('.controls').style.display = 'flex';
+            document.querySelector('.info-panel').style.display = 'flex';
+        });
+
+        document.getElementById('nextTopicBtn').addEventListener('click', () => {
+            window.location.href = 'topics.html';
+        });
+
+        // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+        window.addEventListener('load', initTest);
+
+        // ЗАЩИТА ОТ ВЫХОДА
+        window.addEventListener('beforeunload', (e) => {
+            if (!testCompleted) {
+                e.preventDefault();
+                e.returnValue = 'Вы уверены, что хотите покинуть страницу? Весь прогресс в тесте будет потерян.';
+            }
+        });
+    </script>
+</body>
+</html>

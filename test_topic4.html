@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Инвестиции - Экономика с нуля</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .info-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .test-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .question-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .question-number {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .answers-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .answer-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .answer-option:hover:not(.answered):not(.selected) {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .answer-option.selected {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .answer-option.correct {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .answer-option.incorrect {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            animation: incorrectShake 0.5s ease;
+        }
+        
+        .answer-option.answered {
+            cursor: not-allowed;
+        }
+        
+        .answer-letter {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-option.selected .answer-letter {
+            background: #2980b9;
+        }
+        
+        .answer-option.correct .answer-letter {
+            background: #27ae60;
+        }
+        
+        .answer-option.incorrect .answer-letter {
+            background: #c0392b;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .control-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .prev-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .next-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .restart-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .control-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .result-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            display: none;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .result-score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #3498db;
+        }
+        
+        .result-passed {
+            color: #2ecc71;
+        }
+        
+        .result-failed {
+            color: #e74c3c;
+        }
+        
+        .result-message {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .review-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .next-topic-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .retry-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #3498db);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+            }
+            
+            .info-panel {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .test-info {
+                justify-content: space-around;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes incorrectShake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .question-container {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .answer-option {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .answer-indicator {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .correct-indicator {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #27ae60;
+        }
+        
+        .incorrect-indicator {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" id="backBtn">
+            ← К карточкам
+        </button>
+        
+        <div class="header">
+            <h1>📝 Тест: Инвестиции</h1>
+            <p>Ответьте на 6 вопросов, чтобы разблокировать следующую тему. Минимум 4 правильных ответа для успешного прохождения.</p>
+        </div>
+        
+        <div class="info-panel">
+            <div class="test-info">
+                <div class="info-item">
+                    <div class="info-value" id="currentQuestion">1</div>
+                    <div class="info-label">Вопрос</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-value" id="correctCount">0</div>
+                    <div class="info-label">Правильно</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-value" id="timer">05:00</div>
+                    <div class="info-label">Осталось</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div id="progressText">Прогресс: 0%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="questionContainer">
+            <div class="question-number">Вопрос <span id="questionNum">1</span> из 6</div>
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="answers-grid" id="answersGrid">
+            </div>
+            
+            <div class="answer-indicator" id="answerIndicator"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn prev-btn" id="prevBtn">
+                ← Назад
+            </button>
+            
+            <button class="control-btn next-btn" id="nextBtn">
+                Далее →
+            </button>
+            
+            <button class="control-btn submit-btn" id="submitBtn" style="display: none;">
+                ✅ Завершить тест
+            </button>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-score" id="resultScore"></div>
+            <div class="result-message" id="resultMessage"></div>
+            
+            <div class="result-actions">
+                <button class="action-btn review-btn" id="reviewBtn">
+                    📚 Вернуться к карточкам
+                </button>
+                <button class="action-btn retry-btn" id="retryBtn">
+                    🔄 Пройти заново
+                </button>
+                <button class="action-btn next-topic-btn" id="nextTopicBtn" style="display: none;">
+                    🔓 Перейти к теме 5
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsDatabase = [
+            {
+                question: "Что такое инвестиции?",
+                answers: [
+                    "Хранение денег в банке под проценты",
+                    "Вложение капитала с целью получения дохода в будущем",
+                    "Покупка товаров для личного потребления",
+                    "Получение кредита в банке"
+                ],
+                correct: 1,
+                explanation: "Инвестиции — это вложение капитала с целью получения дохода или прибыли в будущем. Это процесс покупки активов, которые, как ожидается, будут приносить доход или расти в цене."
+            },
+            {
+                question: "Что такое акция?",
+                answers: [
+                    "Долговая расписка компании",
+                    "Доля в собственности компании",
+                    "Договор аренды недвижимости",
+                    "Страховой полис"
+                ],
+                correct: 1,
+                explanation: "Акция — ценная бумага, дающая право на долю в собственности компании и на часть ее прибыли. Владельцы акций называются акционерами."
+            },
+            {
+                question: "Что такое дивиденды?",
+                answers: [
+                    "Процент по банковскому вкладу",
+                    "Часть прибыли компании, выплачиваемая акционерам",
+                    "Налог на доходы физических лиц",
+                    "Комиссия брокера за услуги"
+                ],
+                correct: 1,
+                explanation: "Дивиденды — часть прибыли компании, распределяемая между акционерами пропорционально количеству имеющихся у них акций. Выплачиваются не всегда, а по решению собрания акционеров."
+            },
+            {
+                question: "Что такое облигация?",
+                answers: [
+                    "Акция компании-производителя обуви",
+                    "Долговая ценная бумага с фиксированным доходом",
+                    "Договор купли-продажи недвижимости",
+                    "Свидетельство о владении золотом"
+                ],
+                correct: 1,
+                explanation: "Облигация — долговая ценная бумага, по которой эмитент обязуется выплатить инвестору определенную сумму в будущем и регулярные процентные платежи (купонные выплаты)."
+            },
+            {
+                question: "Что такое фондовый рынок?",
+                answers: [
+                    "Рынок сельскохозяйственной продукции",
+                    "Рынок недвижимости",
+                    "Рынок, где торгуют ценными бумагами",
+                    "Рынок драгоценных металлов"
+                ],
+                correct: 2,
+                explanation: "Фондовый рынок — это организованный рынок, где покупают и продают ценные бумаги: акции, облигации, паи инвестиционных фондов."
+            },
+            {
+                question: "Что такое ПИФ?",
+                answers: [
+                    "Пенсионный индивидуальный фонд",
+                    "Паевой инвестиционный фонд",
+                    "Производственный инвестиционный фонд",
+                    "Потребительский инновационный фонд"
+                ],
+                correct: 1,
+                explanation: "ПИФ (паевой инвестиционный фонд) — организация, которая собирает деньги многих инвесторов и вкладывает их в различные активы под управлением профессиональных управляющих."
+            },
+            {
+                question: "Что такое диверсификация?",
+                answers: [
+                    "Вложение всех средств в один актив",
+                    "Распределение инвестиций между разными активами",
+                    "Продажа всех активов при падении рынка",
+                    "Увеличение доли рискованных активов"
+                ],
+                correct: 1,
+                explanation: "Диверсификация — распределение инвестиций между разными активами для снижения риска. Принцип: не класть все яйца в одну корзину."
+            },
+            {
+                question: "Что такое криптовалюта?",
+                answers: [
+                    "Традиционные деньги в цифровой форме",
+                    "Цифровые деньги, использующие криптографию",
+                    "Иностранная валюта в электронном виде",
+                    "Деньги, выпускаемые Центральным банком"
+                ],
+                correct: 1,
+                explanation: "Криптовалюта — цифровые или виртуальные деньги, использующие криптографию для безопасности. Они децентрализованы и не контролируются государством."
+            },
+            {
+                question: "Что такое инвестиционный портфель?",
+                answers: [
+                    "Папка с документами на недвижимость",
+                    "Совокупность всех активов инвестора",
+                    "Счет в иностранном банке",
+                    "Депозит в нескольких банках"
+                ],
+                correct: 1,
+                explanation: "Инвестиционный портфель — совокупность всех активов инвестора: акций, облигаций, недвижимости, драгоценных металлов и других инструментов."
+            },
+            {
+                question: "Как связаны риск и доходность?",
+                answers: [
+                    "Чем выше риск, тем ниже доходность",
+                    "Чем выше риск, тем выше потенциальная доходность",
+                    "Риск и доходность не связаны",
+                    "Чем ниже риск, тем выше доходность"
+                ],
+                correct: 1,
+                explanation: "Принцип инвестирования: чем выше потенциальная доходность, тем выше риск потери средств. Безрисковых инвестиций с высокой доходностью не существует."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questionsDatabase.length).fill(null);
+        let userAnswerStatus = Array(questionsDatabase.length).fill(null);
+        let correctAnswersCount = 0;
+        let testCompleted = false;
+        let questions = [];
+        let timeLeft = 300;
+        let timerInterval = null;
+        let currentQuestionAnswered = false;
+
+        const questionText = document.getElementById('questionText');
+        const answersGrid = document.getElementById('answersGrid');
+        const questionNum = document.getElementById('questionNum');
+        const currentQuestion = document.getElementById('currentQuestion');
+        const correctCount = document.getElementById('correctCount');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultScore = document.getElementById('resultScore');
+        const resultMessage = document.getElementById('resultMessage');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const timerDisplay = document.getElementById('timer');
+        const answerIndicator = document.getElementById('answerIndicator');
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function initTest() {
+            const allQuestions = shuffleArray([...questionsDatabase]);
+            questions = allQuestions.slice(0, 6);
+            
+            questions.forEach((q, index) => {
+                const answers = shuffleArray([...q.answers]);
+                const correctIndex = answers.indexOf(q.answers[q.correct]);
+                questions[index] = {
+                    ...q,
+                    answers: answers,
+                    correct: correctIndex
+                };
+            });
+            
+            currentQuestionIndex = 0;
+            userAnswers = Array(questions.length).fill(null);
+            userAnswerStatus = Array(questions.length).fill(null);
+            correctAnswersCount = 0;
+            testCompleted = false;
+            currentQuestionAnswered = false;
+            
+            correctCount.textContent = '0';
+            
+            startTimer();
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            questionText.textContent = question.question;
+            questionNum.textContent = currentQuestionIndex + 1;
+            currentQuestion.textContent = currentQuestionIndex + 1;
+            
+            updateProgress();
+            
+            answerIndicator.style.display = 'none';
+            answerIndicator.textContent = '';
+            answerIndicator.className = 'answer-indicator';
+            
+            currentQuestionAnswered = userAnswers[currentQuestionIndex] !== null;
+            
+            answersGrid.innerHTML = '';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            question.answers.forEach((answer, index) => {
+                const answerElement = document.createElement('button');
+                answerElement.className = 'answer-option';
+                
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    answerElement.classList.add('answered');
+                    
+                    if (userAnswers[currentQuestionIndex] === index) {
+                        answerElement.classList.add('selected');
+                        
+                        if (userAnswerStatus[currentQuestionIndex] === 'correct') {
+                            answerElement.classList.add('correct');
+                        } else if (userAnswerStatus[currentQuestionIndex] === 'incorrect') {
+                            answerElement.classList.add('incorrect');
+                        }
+                    }
+                    
+                    if (index === question.correct && userAnswers[currentQuestionIndex] !== question.correct) {
+                        answerElement.classList.add('correct');
+                    }
+                }
+                
+                answerElement.innerHTML = `
+                    <div class="answer-letter">${letters[index]}</div>
+                    <div class="answer-text">${answer}</div>
+                `;
+                
+                if (!currentQuestionAnswered) {
+                    answerElement.addEventListener('click', () => selectAnswer(index));
+                }
+                
+                answersGrid.appendChild(answerElement);
+            });
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = !currentQuestionAnswered;
+            
+            const isLastQuestion = currentQuestionIndex === questions.length - 1;
+            if (isLastQuestion && currentQuestionAnswered) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function selectAnswer(answerIndex) {
+            if (currentQuestionAnswered) return;
+            
+            const question = questions[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = answerIndex;
+            
+            const isCorrect = answerIndex === question.correct;
+            userAnswerStatus[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
+            
+            if (isCorrect) {
+                correctAnswersCount++;
+                correctCount.textContent = correctAnswersCount;
+            }
+            
+            currentQuestionAnswered = true;
+            
+            showAnswerFeedback(isCorrect, question.explanation);
+            
+            nextBtn.disabled = false;
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+            }
+        }
+
+        function showAnswerFeedback(isCorrect, explanation) {
+            const answerOptions = document.querySelectorAll('.answer-option');
+            const question = questions[currentQuestionIndex];
+            
+            answerOptions.forEach((option, index) => {
+                option.classList.add('answered');
+                
+                const newOption = option.cloneNode(true);
+                option.parentNode.replaceChild(newOption, option);
+                
+                if (index === userAnswers[currentQuestionIndex]) {
+                    newOption.classList.add('selected');
+                    if (isCorrect) {
+                        newOption.classList.add('correct');
+                    } else {
+                        newOption.classList.add('incorrect');
+                    }
+                }
+                
+                if (index === question.correct && !isCorrect) {
+                    newOption.classList.add('correct');
+                }
+            });
+            
+            answerIndicator.textContent = explanation;
+            answerIndicator.className = `answer-indicator ${isCorrect ? 'correct-indicator' : 'incorrect-indicator'}`;
+            answerIndicator.style.display = 'block';
+            answerIndicator.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `Прогресс: ${Math.round(progress)}%`;
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 300;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        function finishTest() {
+            clearInterval(timerInterval);
+            testCompleted = true;
+            
+            const score = Math.round((correctAnswersCount / questions.length) * 100);
+            const passed = correctAnswersCount >= 4;
+            
+            resultTitle.textContent = passed ? '🎉 Поздравляем!' : '😔 Попробуйте еще раз';
+            resultScore.textContent = `${score}%`;
+            resultScore.className = `result-score ${passed ? 'result-passed' : 'result-failed'}`;
+            
+            if (passed) {
+                resultMessage.textContent = `Вы правильно ответили на ${correctAnswersCount} из ${questions.length} вопросов. Тема успешно пройдена! Следующая тема разблокирована.`;
+                document.getElementById('nextTopicBtn').style.display = 'flex';
+                
+                localStorage.setItem('topic4_passed', 'true');
+                localStorage.setItem('topic4_test_score', score);
+                
+                confettiAnimation();
+            } else {
+                resultMessage.textContent = `Вы правильно ответили на ${correctAnswersCount} из ${questions.length} вопросов. Для прохождения нужно минимум 4 правильных ответа. Вы можете вернуться к карточкам или попробовать еще раз.`;
+            }
+            
+            resultContainer.style.display = 'block';
+            questionContainer.style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.info-panel').style.display = 'none';
+        }
+
+        function confettiAnimation() {
+            const confettiCount = 100;
+            const colors = ['#3498db', '#2ecc71', '#9b59b6', '#e74c3c', '#f1c40f'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.opacity = '0.8';
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                
+                document.body.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight + 20}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 2000 + Math.random() * 3000,
+                    easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        });
+
+        submitBtn.addEventListener('click', finishTest);
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (confirm('Вы уверены? Весь прогресс в тесте будет потерян.')) {
+                window.location.href = 'study_topic4.html';
+            }
+        });
+
+        document.getElementById('reviewBtn').addEventListener('click', () => {
+            window.location.href = 'study_topic4.html';
+        });
+
+        document.getElementById('retryBtn').addEventListener('click', () => {
+            initTest();
+            resultContainer.style.display = 'none';
+            questionContainer.style.display = 'block';
+            document.querySelector('.controls').style.display = 'flex';
+            document.querySelector('.info-panel').style.display = 'flex';
+        });
+
+        document.getElementById('nextTopicBtn').addEventListener('click', () => {
+            window.location.href = 'topics.html';
+        });
+
+        window.addEventListener('load', initTest);
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!testCompleted) {
+                e.preventDefault();
+                e.returnValue = 'Вы уверены, что хотите покинуть страницу? Весь прогресс в тесте будет потерян.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тест карточки</title>
+    <style>
+        /* МИНИМАЛЬНЫЙ РАБОЧИЙ CSS */
+        .card-container {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin: 50px auto;
+            perspective: 1000px;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .card-back {
+            background: white;
+            color: #333;
+            transform: rotateY(180deg);
+        }
+        
+        .card-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 20px;">
+        <h1>Тест переворота карточки</h1>
+        
+        <div class="card-container">
+            <div class="card" id="card">
+                <!-- ПЕРЕДНЯЯ СТОРОНА -->
+                <div class="card-front">
+                    <div class="card-title">Что такое экономика?</div>
+                    <p>Нажми на карточку или кнопку ниже</p>
+                </div>
+                
+                <!-- ОБОРОТНАЯ СТОРОНА -->
+                <div class="card-back">
+                    <h3>Объяснение:</h3>
+                    <p>Экономика — это наука о том, как общество использует ограниченные ресурсы.</p>
+                    <ul>
+                        <li>Ресурсы ограничены</li>
+                        <li>Потребности безграничны</li>
+                        <li>Нужно эффективно распределять</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <button onclick="flipCard()">Перевернуть карточку</button>
+            <button onclick="resetCard()">Сбросить</button>
+        </div>
+        
+        <div style="margin-top: 30px; color: #666;">
+            <p>Проверка: при клике на карточку должен добавиться класс "flipped"</p>
+            <p>Текущий класс карточки: <span id="status">card</span></p>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        const statusSpan = document.getElementById('status');
+        
+        // Функция переворота
+        function flipCard() {
+            console.log('Кнопка нажата!');
+            card.classList.toggle('flipped');
+            updateStatus();
+        }
+        
+        // Функция сброса
+        function resetCard() {
+            card.classList.remove('flipped');
+            updateStatus();
+        }
+        
+        // Обновление статуса
+        function updateStatus() {
+            statusSpan.textContent = card.className;
+            console.log('Класс карточки:', card.className);
+        }
+        
+        // Клик по карточке
+        card.addEventListener('click', flipCard);
+        
+        // Управление с клавиатуры
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                flipCard();
+                e.preventDefault();
+            }
+            if (e.key === 'Escape') {
+                resetCard();
+            }
+        });
+        
+        // Инициализация
+        updateStatus();
+    </script>
+</body>
+</html>

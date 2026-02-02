@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карьера и заработок - Экономика с нуля</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            touch-action: pan-y;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        }
+        
+        .progress {
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #3498db);
+            width: 10%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .card-container {
+            width: 100%;
+            height: 450px;
+            margin: 20px auto;
+            perspective: 1000px;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .card-back {
+            background: white;
+            color: #333;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            justify-content: flex-start;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .card-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .card-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            text-align: center;
+            width: 100%;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #3498db;
+            z-index: 100;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+        
+        .nav-arrow:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%);
+        }
+        
+        .nav-arrow:disabled:hover {
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .prev-arrow {
+            left: -70px;
+        }
+        
+        .next-arrow {
+            right: -70px;
+        }
+        
+        .test-btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .test-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .test-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .test-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+        
+        .test-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+        
+        .explanation {
+            margin-bottom: 20px;
+        }
+        
+        .explanation h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        
+        .explanation p, .explanation ul {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .explanation ul {
+            padding-left: 20px;
+        }
+        
+        .explanation li {
+            margin-bottom: 8px;
+        }
+        
+        .card-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+            padding: 10px;
+        }
+        
+        .card-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .card-indicator:hover {
+            transform: scale(1.2);
+            background: #bbb;
+        }
+        
+        .card-indicator.active {
+            background: #3498db;
+            transform: scale(1.4);
+            border-color: white;
+            box-shadow: 0 0 0 2px #3498db;
+        }
+        
+        .card-indicator.visited {
+            background: #7f8c8d;
+        }
+        
+        .swipe-hint {
+            text-align: center;
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .module {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            color: #7f8c8d;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .progress-status {
+            text-align: center;
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 15px 15px 0 0;
+            padding: 40px 20px 30px;
+            margin-top: 40px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-title {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .contact-icon {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-value {
+            color: #3498db;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-value:hover {
+            color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .email-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin-top: 15px;
+        }
+        
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #e74c3c;
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237f8c8d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        
+        .modal-submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .modal-submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .modal-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .status-success {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #27ae60;
+        }
+        
+        .status-error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .prev-arrow {
+                left: -60px;
+            }
+            
+            .next-arrow {
+                right: -60px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .prev-arrow {
+                left: 10px;
+                background: rgba(255, 255, 255, 0.8);
+            }
+            
+            .next-arrow {
+                right: 10px;
+                background: rgba(255, 255, 255, 0.8);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .card-container {
+                height: 500px;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .card-front, .card-back {
+                padding: 20px;
+            }
+            
+            .progress-bar {
+                width: 200px;
+            }
+            
+            .swipe-hint {
+                display: block;
+            }
+            
+            .nav-arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .modal {
+                padding: 30px 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.7rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card-container {
+                height: 550px;
+            }
+            
+            .card-title {
+                font-size: 1.3rem;
+            }
+            
+            .progress {
+                width: 100%;
+            }
+            
+            .progress-bar {
+                width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .test-btn {
+                width: 100%;
+                padding: 16px 20px;
+            }
+            
+            .card-indicator {
+                width: 12px;
+                height: 12px;
+            }
+            
+            .card-indicator.active {
+                transform: scale(1.3);
+            }
+            
+            .footer {
+                padding: 30px 15px 20px;
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 25px 15px;
+            }
+        }
+        
+        .card.slide-out-left {
+            animation: smoothSlideOutLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .card.slide-in-right {
+            animation: smoothSlideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .card.slide-out-right {
+            animation: smoothSlideOutRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .card.slide-in-left {
+            animation: smoothSlideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes smoothSlideOutLeft {
+            0% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(-10%) rotateY(-5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(-100%) rotateY(-10deg) scale(0.95);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes smoothSlideInRight {
+            0% { 
+                transform: translateX(100%) rotateY(10deg) scale(0.95);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(10%) rotateY(5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes smoothSlideOutRight {
+            0% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(10%) rotateY(5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(100%) rotateY(10deg) scale(0.95);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes smoothSlideInLeft {
+            0% { 
+                transform: translateX(-100%) rotateY(-10deg) scale(0.95);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(-10%) rotateY(-5deg) scale(0.98);
+            }
+            100% { 
+                transform: translateX(0) rotateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .card.smooth-flip {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            }
+        }
+        
+        .test-btn.pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" id="backBtn">
+                ← К выбору тем
+            </button>
+            
+            <div class="progress">
+                <div id="progressText">Карточка 1 из 10</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="nav-arrow prev-arrow" id="prevArrow" title="Предыдущая карточка">
+            ←
+        </button>
+        
+        <button class="nav-arrow next-arrow" id="nextArrow" title="Следующая карточка">
+            →
+        </button>
+        
+        <div class="card-container">
+            <div class="card" id="card">
+                <div class="card-front">
+                    <div class="card-number" id="cardNumFront">#1</div>
+                    <h2 class="card-title" id="cardTitle">Планирование карьеры</h2>
+                    <div class="hint">Кликните, чтобы перевернуть карточку</div>
+                </div>
+                
+                <div class="card-back">
+                    <div class="card-number" id="cardNumBack">#1</div>
+                    
+                    <div class="explanation">
+                        <h4>📖 Определение:</h4>
+                        <p id="definitionText">Планирование карьеры — это процесс определения профессиональных целей, анализа своих способностей и интересов, а также разработки стратегии для достижения желаемой позиции на рынке труда.</p>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>💡 Простыми словами:</h4>
+                        <p id="simpleText">Планирование карьеры — это когда вы задумываетесь: кем я хочу быть через 5-10 лет, что мне для этого нужно уметь, какие шаги предпринять и как измерить свой прогресс.</p>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>🎯 Ключевые моменты:</h4>
+                        <ul id="keyPoints"></ul>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>📊 Пример из жизни:</h4>
+                        <p id="exampleText">Выпускник университета хочет стать финансовым директором. Его план: 2 года работы аналитиком, MBA, 3 года работы менеджером, затем переход в другую компанию на позицию директора.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-indicators" id="cardIndicators"></div>
+        
+        <div class="swipe-hint">
+            👆 Свайпните влево/вправо для переключения карточек
+        </div>
+        
+        <div class="progress-status" id="progressStatus">
+            Изучено: 1/10 карточек
+        </div>
+        
+        <div class="test-btn-container">
+            <button class="test-btn" id="testBtn">
+                🎯 Пройти тест по теме
+            </button>
+        </div>
+        
+        <div class="module">
+            📂 <strong>Тема 7: Карьера и заработок</strong> • Карточки 1-10 • Пройдите тест для завершения курса
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">📬 Свяжитесь с нами</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-label">Электронная почта</div>
+                    <a href="#" class="contact-value" id="emailLink">
+                        admin@economika-s-nulya.ru
+                    </a>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-label">Техническая поддержка</div>
+                    <a href="#" class="contact-value" id="supportLink">
+                        support@economika-s-nulya.ru
+                    </a>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">🚀</div>
+                    <div class="contact-label">Предложения по улучшению</div>
+                    <a href="#" class="contact-value" id="feedbackLink">
+                        feedback@economika-s-nulya.ru
+                    </a>
+                </div>
+            </div>
+            
+            <button class="email-btn" id="emailBtn">
+                <span>✉️</span>
+                Написать администратору
+            </button>
+            
+            <div class="copyright">
+                <p>© 2026 Экономика с нуля. Все права защищены.</p>
+                <p style="margin-top: 5px; font-size: 0.8rem;">Образовательный проект для изучения экономики с нуля</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="feedbackModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">×</button>
+            
+            <h1 class="modal-title">✉️ Написать администратору</h1>
+            <p class="modal-subtitle">
+                Есть вопросы, предложения или нашли ошибку? Напишите нам, и мы обязательно ответим!
+            </p>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label class="form-label">
+                        Ваше имя <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="userName" placeholder="Как к вам обращаться?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Email для ответа <span class="required">*</span>
+                    </label>
+                    <input type="email" class="form-input" id="userEmail" placeholder="example@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Тема сообщения <span class="required">*</span>
+                    </label>
+                    <select class="form-select" id="messageTopic" required>
+                        <option value="" disabled selected>Выберите тему</option>
+                        <option value="question">Вопрос по материалу</option>
+                        <option value="bug">Сообщить об ошибке</option>
+                        <option value="suggestion">Предложение по улучшению</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Ваше сообщение <span class="required">*</span>
+                    </label>
+                    <textarea class="form-textarea" id="messageText" placeholder="Опишите ваш вопрос или предложение подробно..." required></textarea>
+                    <div class="char-counter">
+                        <span id="charCount">0</span>/1000 символов
+                    </div>
+                </div>
+                
+                <button type="submit" class="modal-submit-btn" id="submitBtn">
+                    <span id="submitText">📨 Отправить сообщение</span>
+                    <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
+                </button>
+            </form>
+            
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        const cardsData = [
+            {
+                id: 1,
+                title: "Планирование карьеры",
+                definition: "Планирование карьеры — это процесс определения профессиональных целей, анализа своих способностей и интересов, а также разработки стратегии для достижения желаемой позиции на рынке труда.",
+                simple: "Планирование карьеры — это когда вы задумываетесь: кем я хочу быть через 5-10 лет, что мне для этого нужно уметь, какие шаги предпринять и как измерить свой прогресс.",
+                keyPoints: [
+                    "Анализ своих интересов, ценностей и способностей",
+                    "Исследование рынка труда и перспективных профессий",
+                    "Постановка SMART-целей (конкретных, измеримых, достижимых, релевантных, ограниченных по времени)",
+                    "Разработка плана развития на 1-3-5 лет",
+                    "Регулярный пересмотр и корректировка плана"
+                ],
+                example: "Выпускник университета хочет стать финансовым директором. Его план: 2 года работы аналитиком, MBA, 3 года работы менеджером, затем переход в другую компанию на позицию директора."
+            },
+            {
+                id: 2,
+                title: "Резюме и самопрезентация",
+                definition: "Резюме — это документ, который кратко представляет профессиональный опыт, образование, навыки и достижения соискателя. Самопрезентация — умение эффектно представлять себя на собеседовании.",
+                simple: "Резюме — это ваша 'визитная карточка' для работодателя, а самопрезентация — умение интересно рассказать о себе так, чтобы вас запомнили и захотели взять на работу.",
+                keyPoints: [
+                    "Резюме должно быть четким, структурированным и без ошибок",
+                    "Использование глаголов действия (разработал, увеличил, оптимизировал)",
+                    "Цифры и конкретные результаты вместо общих фраз",
+                    "Подготовка elevator pitch — краткого рассказа о себе за 30-60 секунд",
+                    "Практика ответов на типовые вопросы собеседования"
+                ],
+                example: "Вместо 'работал над увеличением продаж' написать 'увеличил продажи на 35% за полгода за счет внедрения CRM-системы и обучения отдела'."
+            },
+            {
+                id: 3,
+                title: "Переговоры о зарплате",
+                definition: "Переговоры о зарплате — это процесс обсуждения условий оплаты труда между работодателем и соискателем, направленный на достижение взаимовыгодного соглашения.",
+                simple: "Переговоры о зарплате — это диалог, где вы обосновываете, почему стоите определенных денег, а работодатель оценивает вашу ценность для компании.",
+                keyPoints: [
+                    "Исследование рыночных ставок для аналогичных позиций",
+                    "Определение своего 'коридора' зарплаты (минимум-желаемый-максимум)",
+                    "Готовность обосновать свою ценность конкретными достижениями",
+                    "Учет полного пакета компенсаций (бонусы, страховка, обучение)",
+                    "Практика ведения переговоров заранее"
+                ],
+                example: "Кандидат приходит на собеседование, зная, что средняя зарплата для этой позиции — 80-100 тыс. руб. Он просит 95 тыс., приводя примеры своих достижений на предыдущей работе."
+            },
+            {
+                id: 4,
+                title: "Профессии в экономике и финансах",
+                definition: "Экономические профессии охватывают широкий спектр специальностей, связанных с анализом, планированием и управлением финансовыми ресурсами организаций и государств.",
+                simple: "Это все профессии, где нужно работать с деньгами, данными и стратегиями: от бухгалтера и аналитика до финансового директора и инвестиционного банкира.",
+                keyPoints: [
+                    "Бухгалтер — учет финансовых операций компании",
+                    "Финансовый аналитик — анализ финансовых данных и прогнозирование",
+                    "Аудитор — проверка финансовой отчетности",
+                    "Инвестиционный менеджер — управление инвестиционными портфелями",
+                    "Экономист — анализ экономических процессов и разработка рекомендаций"
+                ],
+                example: "Выпускник экономического факультета может начать карьеру аналитиком в банке, затем перейти в консалтинг, а позже стать финансовым директором в крупной компании."
+            },
+            {
+                id: 5,
+                title: "Фриланс и самозанятость",
+                definition: "Фриланс — форма занятости, при которой специалист работает самостоятельно на разных заказчиков, а самозанятость — официальный статус для легальной работы на себя без образования юридического лица.",
+                simple: "Фриланс — это когда вы работаете на разных клиентов удаленно, а самозанятость — это способ платить налоги с такого заработка без открытия ИП или ООО.",
+                keyPoints: [
+                    "Свободный график и выбор проектов",
+                    "Необходимость самостоятельно искать клиентов",
+                    "Отсутствие социальных гарантий от государства",
+                    "Важность финансовой дисциплины и резервного фонда",
+                    "Возможность работать из любой точки мира"
+                ],
+                example: "Дизайнер работает фрилансером: создает логотипы для стартапов, ведет соцсети для малого бизнеса и оформляет презентации для корпоративных клиентов, платя налоги как самозанятый."
+            },
+            {
+                id: 6,
+                title: "Профессиональное развитие",
+                definition: "Профессиональное развитие — это непрерывный процесс совершенствования знаний, навыков и компетенций для поддержания конкурентоспособности на рынке труда и карьерного роста.",
+                simple: "Профессиональное развитие — это постоянное обучение новому, чтобы не отстать от изменений в профессии и быть востребованным специалистом.",
+                keyPoints: [
+                    "Курсы повышения квалификации и профессиональные сертификации",
+                    "Посещение конференций и отраслевых мероприятий",
+                    "Чтение профессиональной литературы и подписка на экспертов",
+                    "Менторство и коучинг",
+                    "Развитие soft skills (коммуникация, лидерство, тайм-менеджмент)"
+                ],
+                example: "Финансовый менеджер ежегодно проходит курсы по новым стандартам отчетности, читает профильные издания, посещает финансовые форумы и имеет наставника — опытного финансового директора."
+            },
+            {
+                id: 7,
+                title: "Сетевые навыки и нетворкинг",
+                definition: "Нетворкинг — это построение и поддержание профессиональных связей, которые могут помочь в карьерном развитии, поиске работы или решении профессиональных задач.",
+                simple: "Нетворкинг — это умение заводить полезные знакомства в профессиональной среде, которые могут помочь в карьере, но не ради сиюминутной выгоды, а для взаимопомощи.",
+                keyPoints: [
+                    "Посещение профессиональных мероприятий и конференций",
+                    "Активность в LinkedIn и профессиональных сообществах",
+                    "Помощь другим без ожидания немедленной отдачи",
+                    "Поддержание связи с бывшими коллегами и однокурсниками",
+                    "Эффективное представление себя новым знакомым"
+                ],
+                example: "Специалист регулярно посещает отраслевые meetups, общается с коллегами в LinkedIn, делится полезными материалами и иногда обращается к знакомым за советом по сложным проектам."
+            },
+            {
+                id: 8,
+                title: "Work-life balance",
+                definition: "Work-life balance (баланс работы и жизни) — это гармоничное распределение времени и энергии между профессиональной деятельностью и личной жизнью для поддержания физического и психического здоровья.",
+                simple: "Work-life balance — это когда работа не поглощает всю жизнь, а остается время на семью, хобби, отдых и заботу о себе.",
+                keyPoints: [
+                    "Установление четких границ рабочего времени",
+                    "Приоритизация задач и отказ от многозадачности",
+                    "Использование отпусков и выходных для полноценного отдыха",
+                    "Развитие хобби и интересов вне работы",
+                    "Забота о физическом и ментальном здоровье"
+                ],
+                example: "Менеджер заканчивает работу в 19:00, не проверяет почту в выходные, дважды в неделю ходит в спортзал, раз в квартал берет короткий отпуск и уделяет время семье каждый вечер."
+            },
+            {
+                id: 9,
+                title: "Карьерные кризисы и переходы",
+                definition: "Карьерный кризис — это период сомнений в выбранном профессиональном пути, неудовлетворенности работой или потребности в изменениях. Карьерный переход — смена профессии, отрасли или формата работы.",
+                simple: "Карьерный кризис — это когда работа перестает приносить удовольствие, а переход — это смелость начать все заново в новой сфере.",
+                keyPoints: [
+                    "Признаки кризиса: выгорание, потеря мотивации, чувство 'не на своем месте'",
+                    "Анализ причин неудовлетворенности",
+                    "Исследование альтернативных карьерных путей",
+                    "Постепенный переход через обучение и подработки",
+                    "Подготовка финансовой подушки безопасности"
+                ],
+                example: "Бухгалтер с 10-летним стажем чувствует выгорание, проходит курсы по UX-дизайну, начинает брать первые заказы на фрилансе, а через год полностью переходит в новую профессию."
+            },
+            {
+                id: 10,
+                title: "Финансовая независимость",
+                definition: "Финансовая независимость — это состояние, когда пассивный доход (от инвестиций, аренды, бизнеса) покрывает все необходимые расходы, позволяя не работать ради денег, а заниматься тем, что нравится.",
+                simple: "Финансовая независимость — это когда деньги работают на вас, а вы можете не работать, если не хотите, потому что ежемесячных доходов от инвестиций хватает на жизнь.",
+                keyPoints: [
+                    "Создание источников пассивного дохода",
+                    "Регулярное инвестирование части дохода",
+                    "Контроль расходов и увеличение нормы сбережений",
+                    "Диверсификация инвестиционного портфеля",
+                    "Постановка конкретных финансовых целей"
+                ],
+                example: "Специалист откладывает 30% зарплаты, инвестирует в акции и облигации, через 15 лет его инвестиционный портфель приносит 50 тыс. руб. в месяц — этого хватает на базовые нужды, и он может сократить рабочие часы."
+            }
+        ];
+
+        let currentCardIndex = 0;
+        const totalCards = cardsData.length;
+        const cardElement = document.getElementById('card');
+        const testBtn = document.getElementById('testBtn');
+        const prevArrow = document.getElementById('prevArrow');
+        const nextArrow = document.getElementById('nextArrow');
+        const cardIndicators = document.getElementById('cardIndicators');
+        
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const SWIPE_THRESHOLD = 50;
+        let isAnimating = false;
+
+        const feedbackModal = document.getElementById('feedbackModal');
+        const modalClose = document.getElementById('modalClose');
+        const emailBtn = document.getElementById('emailBtn');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const messageTopic = document.getElementById('messageTopic');
+        const messageText = document.getElementById('messageText');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const statusMessage = document.getElementById('statusMessage');
+        const charCount = document.getElementById('charCount');
+        const emailLink = document.getElementById('emailLink');
+        const supportLink = document.getElementById('supportLink');
+        const feedbackLink = document.getElementById('feedbackLink');
+
+        function createIndicators() {
+            cardIndicators.innerHTML = '';
+            for (let i = 0; i < totalCards; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'card-indicator';
+                if (i === currentCardIndex) {
+                    indicator.classList.add('active');
+                }
+                if (i < currentCardIndex) {
+                    indicator.classList.add('visited');
+                }
+                indicator.setAttribute('data-index', i);
+                indicator.title = `Карточка ${i + 1}`;
+                indicator.addEventListener('click', () => goToCard(i));
+                cardIndicators.appendChild(indicator);
+            }
+        }
+
+        function goToCard(index) {
+            if (index === currentCardIndex || isAnimating) return;
+            
+            const direction = index > currentCardIndex ? 'next' : 'prev';
+            currentCardIndex = index;
+            updateCard(direction);
+        }
+
+        function updateCard(animationDirection = null) {
+            if (isAnimating) return;
+            
+            const card = cardsData[currentCardIndex];
+            
+            isAnimating = true;
+            
+            if (animationDirection === 'next') {
+                cardElement.classList.add('slide-out-left');
+                setTimeout(() => {
+                    updateCardContent(card);
+                    cardElement.classList.remove('slide-out-left');
+                    cardElement.classList.add('slide-in-right');
+                    setTimeout(() => {
+                        cardElement.classList.remove('slide-in-right');
+                        isAnimating = false;
+                    }, 400);
+                }, 200);
+            } else if (animationDirection === 'prev') {
+                cardElement.classList.add('slide-out-right');
+                setTimeout(() => {
+                    updateCardContent(card);
+                    cardElement.classList.remove('slide-out-right');
+                    cardElement.classList.add('slide-in-left');
+                    setTimeout(() => {
+                        cardElement.classList.remove('slide-in-left');
+                        isAnimating = false;
+                    }, 400);
+                }, 200);
+            } else {
+                updateCardContent(card);
+                isAnimating = false;
+            }
+            
+            updateIndicators();
+            updateProgressStatus();
+            checkTestAvailability();
+        }
+
+        function updateCardContent(card) {
+            document.getElementById('cardTitle').textContent = card.title;
+            document.getElementById('cardNumFront').textContent = `#${card.id}`;
+            document.getElementById('cardNumBack').textContent = `#${card.id}`;
+            
+            document.getElementById('definitionText').textContent = card.definition;
+            document.getElementById('simpleText').textContent = card.simple;
+            document.getElementById('exampleText').textContent = card.example;
+            
+            const keyPointsList = document.getElementById('keyPoints');
+            keyPointsList.innerHTML = '';
+            card.keyPoints.forEach(point => {
+                const li = document.createElement('li');
+                li.textContent = point;
+                keyPointsList.appendChild(li);
+            });
+            
+            document.getElementById('progressText').textContent = 
+                `Карточка ${currentCardIndex + 1} из ${totalCards}`;
+            
+            const progressPercentage = ((currentCardIndex + 1) / totalCards) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+            
+            cardElement.classList.remove('flipped');
+            cardElement.classList.add('smooth-flip');
+            
+            const cardBack = document.querySelector('.card-back');
+            if (cardBack) {
+                cardBack.scrollTop = 0;
+            }
+            
+            prevArrow.disabled = currentCardIndex === 0;
+            nextArrow.disabled = currentCardIndex === totalCards - 1;
+        }
+
+        function updateIndicators() {
+            const indicators = document.querySelectorAll('.card-indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.remove('active', 'visited');
+                if (index === currentCardIndex) {
+                    indicator.classList.add('active');
+                } else if (index < currentCardIndex) {
+                    indicator.classList.add('visited');
+                }
+            });
+        }
+
+        function updateProgressStatus() {
+            const studiedCards = Math.max(currentCardIndex + 1, parseInt(localStorage.getItem('topic7_studied_cards') || '0'));
+            localStorage.setItem('topic7_studied_cards', studiedCards);
+            
+            const studiedPercentage = Math.round((studiedCards / totalCards) * 100);
+            localStorage.setItem('topic7_progress', studiedPercentage);
+            
+            document.getElementById('progressStatus').textContent = 
+                `Изучено: ${studiedCards}/${totalCards} карточек (${studiedPercentage}%)`;
+        }
+
+        function checkTestAvailability() {
+            const studiedCards = parseInt(localStorage.getItem('topic7_studied_cards') || '0');
+            const canTakeTest = studiedCards >= 8;
+            
+            testBtn.disabled = !canTakeTest;
+            
+            if (canTakeTest) {
+                testBtn.classList.add('pulse');
+                testBtn.title = "Можно пройти тест!";
+            } else {
+                testBtn.classList.remove('pulse');
+                testBtn.title = `Изучите еще ${8 - studiedCards} карточек для доступа к тесту`;
+            }
+        }
+
+        function flipCard() {
+            if (isAnimating) return;
+            
+            cardElement.classList.toggle('flipped');
+            
+            setTimeout(() => {
+                cardElement.classList.remove('smooth-flip');
+            }, 600);
+        }
+
+        prevArrow.addEventListener('click', () => {
+            if (currentCardIndex > 0 && !isAnimating) {
+                currentCardIndex--;
+                updateCard('prev');
+            }
+        });
+
+        nextArrow.addEventListener('click', () => {
+            if (currentCardIndex < totalCards - 1 && !isAnimating) {
+                currentCardIndex++;
+                updateCard('next');
+            }
+        });
+
+        cardElement.addEventListener('click', flipCard);
+
+        testBtn.addEventListener('click', () => {
+            window.location.href = 'test_topic7.html';
+        });
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.location.href = 'topics.html';
+        });
+
+        function handleSwipe() {
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (swipeDistance < -SWIPE_THRESHOLD && currentCardIndex < totalCards - 1) {
+                currentCardIndex++;
+                updateCard('next');
+            }
+            else if (swipeDistance > SWIPE_THRESHOLD && currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCard('prev');
+            }
+        }
+
+        cardElement.addEventListener('touchstart', (e) => {
+            if (isAnimating) return;
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        cardElement.addEventListener('touchend', (e) => {
+            if (isAnimating) return;
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        let mouseDownX = 0;
+        let mouseUpX = 0;
+        
+        cardElement.addEventListener('mousedown', (e) => {
+            if (isAnimating) return;
+            mouseDownX = e.clientX;
+        });
+
+        cardElement.addEventListener('mouseup', (e) => {
+            if (isAnimating) return;
+            mouseUpX = e.clientX;
+            const swipeDistance = mouseUpX - mouseDownX;
+            
+            if (Math.abs(swipeDistance) > SWIPE_THRESHOLD) {
+                if (swipeDistance < 0 && currentCardIndex < totalCards - 1) {
+                    currentCardIndex++;
+                    updateCard('next');
+                } else if (swipeDistance > 0 && currentCardIndex > 0) {
+                    currentCardIndex--;
+                    updateCard('prev');
+                }
+            }
+        });
+
+        function openModal() {
+            feedbackModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            userName.focus();
+        }
+
+        function closeModal() {
+            feedbackModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+
+        function resetForm() {
+            feedbackForm.reset();
+            charCount.textContent = '0';
+            charCount.style.color = '#7f8c8d';
+            statusMessage.style.display = 'none';
+            submitBtn.disabled = false;
+            submitText.textContent = '📨 Отправить сообщение';
+            loadingSpinner.style.display = 'none';
+        }
+
+        messageText.addEventListener('input', () => {
+            const length = messageText.value.length;
+            charCount.textContent = length;
+            
+            if (length > 1000) {
+                messageText.value = messageText.value.substring(0, 1000);
+                charCount.textContent = 1000;
+                charCount.style.color = '#e74c3c';
+            } else if (length > 900) {
+                charCount.style.color = '#f39c12';
+            } else {
+                charCount.style.color = '#7f8c8d';
+            }
+        });
+
+        function showStatus(message, isSuccess) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${isSuccess ? 'status-success' : 'status-error'}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function simulateEmailSending(formData) {
+            return new Promise((resolve) => {
+                const steps = [
+                    "Подготовка письма...",
+                    "Проверка данных...",
+                    "Отправка на сервер...",
+                    "Имитация доставки..."
+                ];
+                
+                let currentStep = 0;
+                
+                const interval = setInterval(() => {
+                    if (currentStep < steps.length) {
+                        submitText.textContent = steps[currentStep];
+                        currentStep++;
+                    } else {
+                        clearInterval(interval);
+                        
+                        setTimeout(() => {
+                            resolve({
+                                success: true,
+                                message: "✅ Сообщение успешно отправлено! Мы ответим вам в течение 24 часов."
+                            });
+                        }, 1000);
+                    }
+                }, 600);
+            });
+        }
+
+        async function submitFeedbackForm(event) {
+            event.preventDefault();
+            
+            if (!userName.value.trim() || !userEmail.value.trim() || !messageTopic.value || !messageText.value.trim()) {
+                showStatus('Пожалуйста, заполните все обязательные поля', false);
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail.value)) {
+                showStatus('Пожалуйста, введите корректный email', false);
+                return;
+            }
+            
+            const formData = {
+                name: userName.value.trim(),
+                email: userEmail.value.trim(),
+                topic: getTopicText(messageTopic.value),
+                message: messageText.value.trim(),
+                date: new Date().toLocaleString('ru-RU'),
+                ip: '127.0.0.1',
+                userAgent: navigator.userAgent
+            };
+            
+            submitBtn.disabled = true;
+            submitText.textContent = 'Начинаем отправку...';
+            loadingSpinner.style.display = 'block';
+            statusMessage.style.display = 'none';
+            
+            try {
+                const result = await simulateEmailSending(formData);
+                
+                if (result.success) {
+                    showStatus(result.message, true);
+                    
+                    console.log('=== СООБЩЕНИЕ ОТПРАВЛЕНО ===');
+                    console.log('От:', formData.name);
+                    console.log('Email:', formData.email);
+                    console.log('Тема:', formData.topic);
+                    console.log('Дата:', formData.date);
+                    console.log('Сообщение:', formData.message);
+                    console.log('IP:', formData.ip);
+                    console.log('Браузер:', formData.userAgent);
+                    console.log('============================');
+                    
+                    setTimeout(() => {
+                        resetForm();
+                        setTimeout(() => {
+                            closeModal();
+                        }, 1000);
+                    }, 2000);
+                } else {
+                    throw new Error(result.message);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                showStatus('❌ Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.', false);
+                
+                submitBtn.disabled = false;
+                submitText.textContent = '📨 Отправить сообщение';
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function getTopicText(topicValue) {
+            const topics = {
+                'question': 'Вопрос по материалу',
+                'bug': 'Сообщить об ошибке',
+                'suggestion': 'Предложение по улучшению',
+                'other': 'Другое'
+            };
+            return topics[topicValue] || 'Другое';
+        }
+
+        emailBtn.addEventListener('click', openModal);
+        
+        emailLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+        
+        supportLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+        
+        feedbackLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        
+        feedbackModal.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) {
+                closeModal();
+            }
+        });
+
+        feedbackForm.addEventListener('submit', submitFeedbackForm);
+
+        document.addEventListener('keydown', (e) => {
+            if (isAnimating) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (currentCardIndex > 0) {
+                        currentCardIndex--;
+                        updateCard('prev');
+                        e.preventDefault();
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (currentCardIndex < totalCards - 1) {
+                        currentCardIndex++;
+                        updateCard('next');
+                        e.preventDefault();
+                    }
+                    break;
+                case ' ':
+                case 'Spacebar':
+                    flipCard();
+                    e.preventDefault();
+                    break;
+                case 'Enter':
+                    if (!testBtn.disabled) {
+                        testBtn.click();
+                    }
+                    break;
+                case 'Escape':
+                    if (feedbackModal.style.display === 'flex') {
+                        closeModal();
+                    } else {
+                        window.location.href = 'topics.html';
+                    }
+                    break;
+            }
+        });
+
+        createIndicators();
+        updateCard();
+        
+        function updateArrowPositions() {
+            const isMobile = window.innerWidth <= 900;
+            if (isMobile) {
+                prevArrow.style.left = '10px';
+                nextArrow.style.right = '10px';
+                prevArrow.style.background = 'rgba(255, 255, 255, 0.8)';
+                nextArrow.style.background = 'rgba(255, 255, 255, 0.8)';
+            } else {
+                prevArrow.style.left = '-70px';
+                nextArrow.style.right = '-70px';
+                prevArrow.style.background = 'rgba(255, 255, 255, 0.9)';
+                nextArrow.style.background = 'rgba(255, 255, 255, 0.9)';
+            }
+        }
+        
+        window.addEventListener('resize', updateArrowPositions);
+        updateArrowPositions();
+        
+        window.addEventListener('load', () => {
+            const savedProgress = localStorage.getItem('topic7_studied_cards');
+            checkTestAvailability();
+        });
+    </script>
+</body>
+</html>
