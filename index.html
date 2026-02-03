@@ -25,7 +25,20 @@
             padding: 20px;
         }
         
-
+        .competition-banner {
+            background: linear-gradient(90deg, #1a3a5f, #2c3e50);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(26, 58, 95, 0.2);
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-left: 5px solid #3498db;
+            border-right: 5px solid #2ecc71;
+        }
+        
         header {
             text-align: center;
             padding: 50px 20px;
@@ -74,7 +87,6 @@
             margin-top: 10px;
         }
         
-
         .benefits {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -133,7 +145,6 @@
             line-height: 1.6;
         }
         
-
         .course-features {
             background: white;
             border-radius: 25px;
@@ -207,7 +218,6 @@
             line-height: 1.5;
         }
         
-
         .project-info {
             background: linear-gradient(135deg, #1a3a5f 0%, #2c3e50 100%);
             border-radius: 25px;
@@ -266,7 +276,6 @@
             justify-content: center;
         }
         
-
         .start-section {
             text-align: center;
             margin: 60px 0;
@@ -311,7 +320,6 @@
             box-shadow: 0 15px 30px rgba(52, 152, 219, 0.4);
         }
         
-
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -347,8 +355,12 @@
             opacity: 0.8;
         }
         
-
         @media (max-width: 768px) {
+            .competition-banner {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+            
             h1 {
                 font-size: 2.2rem;
             }
@@ -380,7 +392,6 @@
             }
         }
         
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -390,7 +401,6 @@
             animation: fadeIn 0.5s ease;
         }
         
-
         .progress-visual {
             display: flex;
             justify-content: center;
@@ -441,6 +451,10 @@
 </head>
 <body>
     <div class="container">
+        <div class="competition-banner">
+            Участник конкурса "КРИТ-2026" Ахмадеев Азамат приветствует жюри конкурса!
+        </div>
+        
         <header>
             <div class="project-badge">
                 <i class="fas fa-graduation-cap"></i>
@@ -461,7 +475,6 @@
             </div>
         </header>
         
-
         <div class="benefits">
             <div class="benefit-card">
                 <div class="benefit-icon">
@@ -488,7 +501,6 @@
             </div>
         </div>
         
-
         <div class="course-features">
             <h2 class="section-title">Особенности учебной платформы</h2>
             
@@ -554,7 +566,6 @@
                 </div>
             </div>
             
-
             <div style="margin-top: 40px; text-align: center;">
                 <div class="progress-visual">
                     <div class="progress-step active">1</div>
@@ -569,7 +580,6 @@
             </div>
         </div>
         
-
         <div class="project-info">
             <h2>Об образовательном проекте</h2>
             <p>
@@ -611,7 +621,6 @@
             </div>
         </div>
         
-
         <div class="start-section">
             <h2>Начните обучение прямо сейчас!</h2>
             <p>
@@ -652,9 +661,7 @@
     </div>
 
     <script>
-
         document.addEventListener('DOMContentLoaded', function() {
-
             const title = document.querySelector('h1');
             title.style.opacity = '0';
             title.style.transform = 'translateY(-20px)';
@@ -665,15 +672,12 @@
                 title.style.transform = 'translateY(0)';
             }, 300);
             
-
             const benefitCards = document.querySelectorAll('.benefit-card');
             benefitCards.forEach((card, index) => {
                 card.style.animationDelay = `${index * 0.1}s`;
             });
             
-
             document.getElementById('startButton').addEventListener('click', function() {
-
                 this.style.transform = 'scale(0.95)';
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Переход...';
                 
@@ -682,7 +686,6 @@
                 }, 500);
             });
             
-
             const progressSteps = document.querySelectorAll('.progress-step');
             let currentStep = 0;
             
@@ -697,7 +700,6 @@
                         setTimeout(animateProgress, 300);
                     }
                 } else {
-
                     setTimeout(() => {
                         currentStep = 0;
                         animateProgress();
@@ -705,10 +707,8 @@
                 }
             }
             
-
             setTimeout(animateProgress, 1000);
             
-
             document.querySelectorAll('.benefit-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('.benefit-icon i');
@@ -726,7 +726,6 @@
                 });
             });
             
-
             const startButton = document.getElementById('startButton');
             startButton.addEventListener('mouseenter', function() {
                 const icon = this.querySelector('i');
@@ -743,7 +742,6 @@
                 }
             });
             
-
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -760,14 +758,12 @@
                 });
             });
             
-
             const currentYear = new Date().getFullYear();
             const yearElement = document.querySelector('.copyright p');
             if (yearElement) {
                 yearElement.innerHTML = yearElement.innerHTML.replace('2024', currentYear);
             }
             
-
             window.addEventListener('scroll', function() {
                 const scrolled = window.pageYOffset;
                 const title = document.querySelector('h1');
@@ -776,7 +772,6 @@
                 }
             });
             
-
             const projectInfo = document.querySelector('.project-info');
             if (projectInfo) {
                 projectInfo.addEventListener('mousemove', function(e) {
@@ -790,7 +785,6 @@
             }
         });
         
-
         const style = document.createElement('style');
         style.textContent = `
             .project-info:hover::before {

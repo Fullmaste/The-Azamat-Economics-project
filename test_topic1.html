@@ -24,7 +24,7 @@
             margin: 0 auto;
         }
         
-        /* ШАПКА */
+
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -59,7 +59,7 @@
             margin: 0 auto;
         }
         
-        /* ИНФО ПАНЕЛЬ */
+
         .info-panel {
             background: white;
             border-radius: 15px;
@@ -96,7 +96,7 @@
             color: #7f8c8d;
         }
         
-        /* ВОПРОС */
+
         .question-container {
             background: white;
             border-radius: 15px;
@@ -118,7 +118,7 @@
             line-height: 1.5;
         }
         
-        /* ВАРИАНТЫ ОТВЕТОВ */
+
         .answers-grid {
             display: flex;
             flex-direction: column;
@@ -191,7 +191,7 @@
             background: #c0392b;
         }
         
-        /* УПРАВЛЕНИЕ */
+
         .controls {
             display: flex;
             justify-content: space-between;
@@ -242,7 +242,7 @@
             cursor: not-allowed;
         }
         
-        /* РЕЗУЛЬТАТ */
+
         .result-container {
             background: white;
             border-radius: 15px;
@@ -318,7 +318,7 @@
             color: white;
         }
         
-        /* ПРОГРЕСС-БАР */
+
         .progress-container {
             margin-top: 20px;
         }
@@ -338,8 +338,7 @@
             width: 0%;
             transition: width 0.3s ease;
         }
-        
-        /* АДАПТИВНОСТЬ */
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -370,7 +369,7 @@
             }
         }
         
-        /* АНИМАЦИИ */
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -398,7 +397,7 @@
             animation: fadeIn 0.3s ease;
         }
         
-        /* ИНДИКАТОР ОТВЕТА */
+
         .answer-indicator {
             margin-top: 15px;
             padding: 10px 15px;
@@ -455,20 +454,20 @@
             </div>
         </div>
         
-        <!-- КОНТЕЙНЕР ВОПРОСА -->
+
         <div class="question-container" id="questionContainer">
             <div class="question-number">Вопрос <span id="questionNum">1</span> из 6</div>
             <div class="question-text" id="questionText"></div>
             
             <div class="answers-grid" id="answersGrid">
-                <!-- Варианты ответов будут добавляться через JS -->
+
             </div>
             
-            <!-- ИНДИКАТОР ОТВЕТА -->
+
             <div class="answer-indicator" id="answerIndicator"></div>
         </div>
         
-        <!-- КНОПКИ УПРАВЛЕНИЯ -->
+
         <div class="controls">
             <button class="control-btn prev-btn" id="prevBtn">
                 ← Назад
@@ -483,7 +482,7 @@
             </button>
         </div>
         
-        <!-- КОНТЕЙНЕР РЕЗУЛЬТАТА -->
+
         <div class="result-container" id="resultContainer">
             <div class="result-title" id="resultTitle"></div>
             <div class="result-score" id="resultScore"></div>
@@ -504,7 +503,7 @@
     </div>
 
     <script>
-        // БАЗА ВОПРОСОВ ДЛЯ ТЕМЫ 1
+
         const questionsDatabase = [
             {
                 question: "Что такое экономика?",
@@ -574,10 +573,10 @@
             }
         ];
 
-        // ПЕРЕМЕННЫЕ
+
         let currentQuestionIndex = 0;
         let userAnswers = Array(questionsDatabase.length).fill(null);
-        let userAnswerStatus = Array(questionsDatabase.length).fill(null); // null, 'correct', 'incorrect'
+        let userAnswerStatus = Array(questionsDatabase.length).fill(null);
         let correctAnswersCount = 0;
         let testCompleted = false;
         let questions = [];
@@ -585,7 +584,7 @@
         let timerInterval = null;
         let currentQuestionAnswered = false;
 
-        // ЭЛЕМЕНТЫ DOM
+
         const questionText = document.getElementById('questionText');
         const answersGrid = document.getElementById('answersGrid');
         const questionNum = document.getElementById('questionNum');
@@ -603,7 +602,7 @@
         const timerDisplay = document.getElementById('timer');
         const answerIndicator = document.getElementById('answerIndicator');
 
-        // ФУНКЦИЯ ПЕРЕМЕШИВАНИЯ МАССИВА
+
         function shuffleArray(array) {
             const newArray = [...array];
             for (let i = newArray.length - 1; i > 0; i--) {
@@ -613,9 +612,9 @@
             return newArray;
         }
 
-        // ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ ТЕСТА
+
         function initTest() {
-            // Перемешиваем вопросы и ответы
+
             questions = shuffleArray([...questionsDatabase]);
             questions.forEach((q, index) => {
                 const answers = shuffleArray([...q.answers]);
@@ -627,7 +626,7 @@
                 };
             });
             
-            // Сбрасываем переменные
+
             currentQuestionIndex = 0;
             userAnswers = Array(questions.length).fill(null);
             userAnswerStatus = Array(questions.length).fill(null);
@@ -635,50 +634,45 @@
             testCompleted = false;
             currentQuestionAnswered = false;
             
-            // Запускаем таймер
+
             startTimer();
             
-            // Показываем первый вопрос
+
             showQuestion();
         }
 
-        // ФУНКЦИЯ ПОКАЗА ВОПРОСА
+
         function showQuestion() {
             const question = questions[currentQuestionIndex];
             
-            // Обновляем текст вопроса
+
             questionText.textContent = question.question;
             questionNum.textContent = currentQuestionIndex + 1;
             currentQuestion.textContent = currentQuestionIndex + 1;
             
-            // Обновляем прогресс
+
             updateProgress();
             
-            // Скрываем индикатор ответа
+
             answerIndicator.style.display = 'none';
             answerIndicator.textContent = '';
             answerIndicator.className = 'answer-indicator';
             
-            // Сбрасываем флаг ответа для текущего вопроса
             currentQuestionAnswered = userAnswers[currentQuestionIndex] !== null;
             
-            // Очищаем контейнер ответов
             answersGrid.innerHTML = '';
             
-            // Добавляем варианты ответов
             const letters = ['A', 'B', 'C', 'D'];
             question.answers.forEach((answer, index) => {
                 const answerElement = document.createElement('button');
                 answerElement.className = 'answer-option';
                 
-                // Если уже отвечали на этот вопрос
                 if (userAnswers[currentQuestionIndex] !== null) {
                     answerElement.classList.add('answered');
                     
                     if (userAnswers[currentQuestionIndex] === index) {
                         answerElement.classList.add('selected');
                         
-                        // Показываем правильность ответа
                         if (userAnswerStatus[currentQuestionIndex] === 'correct') {
                             answerElement.classList.add('correct');
                         } else if (userAnswerStatus[currentQuestionIndex] === 'incorrect') {
@@ -686,7 +680,6 @@
                         }
                     }
                     
-                    // Показываем правильный ответ
                     if (index === question.correct && userAnswers[currentQuestionIndex] !== question.correct) {
                         answerElement.classList.add('correct');
                     }
@@ -697,7 +690,6 @@
                     <div class="answer-text">${answer}</div>
                 `;
                 
-                // Если вопрос еще не отвечен, добавляем обработчик
                 if (!currentQuestionAnswered) {
                     answerElement.addEventListener('click', () => selectAnswer(index));
                 }
@@ -705,11 +697,9 @@
                 answersGrid.appendChild(answerElement);
             });
             
-            // Обновляем состояние кнопок
             prevBtn.disabled = currentQuestionIndex === 0;
             nextBtn.disabled = !currentQuestionAnswered;
             
-            // Показываем/скрываем кнопку отправки
             const isLastQuestion = currentQuestionIndex === questions.length - 1;
             if (isLastQuestion && currentQuestionAnswered) {
                 nextBtn.style.display = 'none';
@@ -720,18 +710,15 @@
             }
         }
 
-        // ФУНКЦИЯ ВЫБОРА ОТВЕТА
         function selectAnswer(answerIndex) {
             if (currentQuestionAnswered) return;
             
             const question = questions[currentQuestionIndex];
             userAnswers[currentQuestionIndex] = answerIndex;
             
-            // Проверяем правильность ответа
             const isCorrect = answerIndex === question.correct;
             userAnswerStatus[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
             
-            // Обновляем счетчик правильных ответов
             if (isCorrect) {
                 correctAnswersCount++;
                 correctCount.textContent = correctAnswersCount;
@@ -739,10 +726,8 @@
             
             currentQuestionAnswered = true;
             
-            // Показываем визуальную обратную связь
             showAnswerFeedback(isCorrect, question.explanation);
             
-            // Обновляем кнопки
             nextBtn.disabled = false;
             if (currentQuestionIndex === questions.length - 1) {
                 nextBtn.style.display = 'none';
@@ -750,7 +735,6 @@
             }
         }
 
-        // ФУНКЦИЯ ПОКАЗА ОБРАТНОЙ СВЯЗИ ПО ОТВЕТУ
         function showAnswerFeedback(isCorrect, explanation) {
             const answerOptions = document.querySelectorAll('.answer-option');
             const question = questions[currentQuestionIndex];
@@ -758,11 +742,9 @@
             answerOptions.forEach((option, index) => {
                 option.classList.add('answered');
                 
-                // Убираем обработчики клика
                 const newOption = option.cloneNode(true);
                 option.parentNode.replaceChild(newOption, option);
                 
-                // Подсвечиваем выбранный ответ
                 if (index === userAnswers[currentQuestionIndex]) {
                     newOption.classList.add('selected');
                     if (isCorrect) {
@@ -772,27 +754,23 @@
                     }
                 }
                 
-                // Подсвечиваем правильный ответ
                 if (index === question.correct && !isCorrect) {
                     newOption.classList.add('correct');
                 }
             });
             
-            // Показываем индикатор с объяснением
             answerIndicator.textContent = explanation;
             answerIndicator.className = `answer-indicator ${isCorrect ? 'correct-indicator' : 'incorrect-indicator'}`;
             answerIndicator.style.display = 'block';
             answerIndicator.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОГРЕССА
         function updateProgress() {
             const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
             progressFill.style.width = `${progress}%`;
             progressText.textContent = `Прогресс: ${Math.round(progress)}%`;
         }
 
-        // ФУНКЦИЯ ТАЙМЕРА
         function startTimer() {
             clearInterval(timerInterval);
             timeLeft = 300;
@@ -811,16 +789,13 @@
             }, 1000);
         }
 
-        // ФУНКЦИЯ ЗАВЕРШЕНИЯ ТЕСТА
         function finishTest() {
             clearInterval(timerInterval);
             testCompleted = true;
             
-            // Считаем итоговый результат
             const score = Math.round((correctAnswersCount / questions.length) * 100);
-            const passed = correctAnswersCount >= 4; // Минимум 4 из 6
+            const passed = correctAnswersCount >= 4;
             
-            // Показываем результат
             resultTitle.textContent = passed ? '🎉 Поздравляем!' : '😔 Попробуйте еще раз';
             resultScore.textContent = `${score}%`;
             resultScore.className = `result-score ${passed ? 'result-passed' : 'result-failed'}`;
@@ -829,24 +804,20 @@
                 resultMessage.textContent = `Вы правильно ответили на ${correctAnswersCount} из ${questions.length} вопросов. Тема успешно пройдена! Следующая тема разблокирована.`;
                 document.getElementById('nextTopicBtn').style.display = 'flex';
                 
-                // Сохраняем результат
                 localStorage.setItem('topic1_passed', 'true');
                 localStorage.setItem('topic1_test_score', score);
                 
-                // Показываем анимацию успеха
                 confettiAnimation();
             } else {
                 resultMessage.textContent = `Вы правильно ответили на ${correctAnswersCount} из ${questions.length} вопросов. Для прохождения нужно минимум 4 правильных ответа. Вы можете вернуться к карточкам или попробовать еще раз.`;
             }
             
-            // Показываем контейнер результата
             resultContainer.style.display = 'block';
             questionContainer.style.display = 'none';
             document.querySelector('.controls').style.display = 'none';
             document.querySelector('.info-panel').style.display = 'none';
         }
 
-        // ФУНКЦИЯ КОНФЕТТИ
         function confettiAnimation() {
             const confettiCount = 100;
             const colors = ['#3498db', '#2ecc71', '#9b59b6', '#e74c3c', '#f1c40f'];
@@ -866,7 +837,6 @@
                 
                 document.body.appendChild(confetti);
                 
-                // Анимация падения
                 const animation = confetti.animate([
                     { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
                     { transform: `translateY(${window.innerHeight + 20}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 }
@@ -879,7 +849,6 @@
             }
         }
 
-        // ОБРАБОТЧИКИ СОБЫТИЙ
         prevBtn.addEventListener('click', () => {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
@@ -896,14 +865,12 @@
 
         submitBtn.addEventListener('click', finishTest);
 
-        // КНОПКА НАЗАД
         document.getElementById('backBtn').addEventListener('click', () => {
             if (confirm('Вы уверены? Весь прогресс в тесте будет потерян.')) {
                 window.location.href = 'study_topic1.html';
             }
         });
 
-        // КНОПКИ РЕЗУЛЬТАТА
         document.getElementById('reviewBtn').addEventListener('click', () => {
             window.location.href = 'study_topic1.html';
         });
@@ -920,10 +887,8 @@
             window.location.href = 'topics.html';
         });
 
-        // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
         window.addEventListener('load', initTest);
 
-        // ЗАЩИТА ОТ ВЫХОДА
         window.addEventListener('beforeunload', (e) => {
             if (!testCompleted) {
                 e.preventDefault();
